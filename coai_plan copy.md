@@ -4,6 +4,7 @@
 [x] A.2. Orchestrator integravimas į routes.py ir testavimas | 2025-08-07, AI agent, reason: Stage 5 completion verification
 [x] A.3. AI agents method signature klaidos pataisymas orchestrator.py faile | 2025-08-07, AI agent, reason: runtime error fix - process_request() signature mismatch
 [x] A.4. Stage 0-2 dokumentacijos headers atnaujinimas iš [ ] į [x] | 2025-08-07, AI agent, reason: documentation accuracy - all sub-tasks completed
+[x] A.5. Git istorijos išvalymas ir GitHub push problemos sprendimas | 2025-08-07, AI agent, reason: 147MB Next.js SWC file exceeded GitHub limits, created clean repository
 # Stage I: Minimal Working COAI Core (MVP)
 
 ---
