@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global theme setup */
+:root {
+  --background: #18181b;
+  --background-light: #27272a;
+  --foreground: #f4f4f5;
+  --foreground-muted: #a1a1aa;
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --border: #27272a;
+  --card: #23232b;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* Component styles using CSS variables */
+.card {
+  background-color: var(--card);
+  color: var(--foreground);
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px 0 rgba(0,0,0,0.15);
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s;
+  border: 2px solid var(--primary-dark);
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  opacity: 0.9;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+}
+
+.border-default {
+  border: 2px solid var(--border);
+}
+
+.input-default {
+  background-color: var(--background-light);
+  color: var(--foreground);
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+}
+
+.input-default:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.input-default::placeholder {
+  color: var(--foreground-muted);
+}
+
+.select-default {
+  background-color: var(--background-light);
+  color: var(--foreground);
+  border: 2px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: all 0.2s;
+}
+
+.select-default:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+.messages-container {
+  background-color: var(--background);
+  border: 2px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.message-user {
+  background-color: var(--primary);
+  color: white;
+  border-radius: 1rem;
+  border: 1px solid var(--primary-dark);
+}
+
+.message-ai {
+  background-color: var(--background-light);
+  color: var(--foreground);
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+}
+
+.modal-container {
+  background-color: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 16px 0 rgba(0,0,0,0.3);
+}

@@ -1,0 +1,23 @@
+2025-08-07: Marked directory and README creation steps as done in COAI Stage I plan, by AI
+
+2025-08-07: Marked template copy steps as done in COAI Stage I plan, by AI
+
+2025-08-07: Ad hoc: Atkurta ir aktyvuota tamsi UI tema (Tailwind dark mode), atnaujinti komponentų stiliai, by AI agent
+
+2025-08-07: Pažymėta: backend paleistas, abu projektai veikia, by AI
+
+2025-08-07: Pažymėta: frontend ir backend integracija per /chat endpoint veikia, by AI
+
+2025-08-07: Step 3 "User interface (frontend) – Chat page" - marked as done, by AI agent
+2025-08-07: Chat page fully implemented with dark theme, responsive design, and API integration, by AI agent
+2025-08-07: Backend server fixed (added flask-cors to requirements.txt) and confirmed working, by AI agent
+2025-08-07: Step 4 "Task processing center / Prompt preprocessor" - completed with full implementation, by AI agent
+2025-08-07: Added preprocessor.py, logger.py modules and enhanced /api/chat endpoint with logging, by AI agent
+2025-08-07: Step 5 "Orchestrator (backend)" - marked as complete, orchestrator.py created and integrated, by AI agent
+2025-08-07: Ad hoc task A.2 added - orchestrator integration testing completed, by AI agent
+2025-08-07: All changes committed - Stage 5 completion with dark theme finalization, by AI agent
+2025-08-07: Step 6 "AI agents module (backend)" - marked as complete, ai_agents.py created with OpenAI and Copilot support, by AI agent
+2025-08-07: Ad hoc task A.3 added - AI agents module implementation completed, by AI agent
+2025-08-07: Ad hoc task A.3 - AI agents method signature fixed in orchestrator.py, by AI agent 
+2025-08-07: Ad hoc task A.4 - Updated Stage 0-2 headers from [ ] to [x] for documentation accuracy, by AI agent 
+2025-08-07: Current project status - Stages 0-6 completed, tested and verified. Ready for Stage 7 implementation, by AI agent 
