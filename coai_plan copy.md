@@ -5,6 +5,8 @@
 [x] A.3. AI agents method signature klaidos pataisymas orchestrator.py faile | 2025-08-07, AI agent, reason: runtime error fix - process_request() signature mismatch
 [x] A.4. Stage 0-2 dokumentacijos headers atnaujinimas iš [ ] į [x] | 2025-08-07, AI agent, reason: documentation accuracy - all sub-tasks completed
 [x] A.5. Git istorijos išvalymas ir GitHub push problemos sprendimas | 2025-08-07, AI agent, reason: 147MB Next.js SWC file exceeded GitHub limits, created clean repository
+[x] A.6. Failų naršyklės lazy loading ir tree vizualizacijos optimizacija | 2025-08-09, AI agent, reason: performance & usability improvement
+[x] A.7. Backend path security enhancement for file access | 2025-08-09, AI agent, reason: security compliance
 # Stage I: Minimal Working COAI Core (MVP)
 
 ---
@@ -116,15 +118,15 @@ Create an agent interface with Copilot (GPT-4.1) or OpenAI API.
 
 ---
 
-## [ ] 7. File system access and management module (backend)
+## [x] 7. File system access and management module (backend) | 2025-08-09, AI agent
 
 ### Goal
 Allow the backend to read basic project files.
 
 ### Instructions
-1. [ ] Add endpoint `/api/files/{filename}`
-2. [ ] Read files in "read" mode only, check path (security!)
-3. [ ] In the frontend, display a file list (dummy data for MVP)
+1. [x] Add endpoint `/api/files/{filename}` | 2025-08-09, AI agent, reason: implemented in backend/app/routes.py
+2. [x] Read files in "read" mode only, check path (security!) | 2025-08-09, AI agent, reason: path security and read-only enforced in backend
+3. [x] In the frontend, display a file list (dummy data for MVP) | 2025-08-09, AI agent, reason: file browser implemented with lazy loading
 
 ---
 
@@ -208,3 +210,4 @@ C:\ai_projects\coai\
 │
 ├── README.md
 └── .gitignore
+```
