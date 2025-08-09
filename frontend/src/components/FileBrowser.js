@@ -94,7 +94,7 @@ export default function FileBrowser() {
   return (
     <div style={{ display: "flex", gap: "2rem" }}>
       <div style={{ minWidth: 300 }}>
-        <h2>Failų medis</h2>
+        <h2 style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "0.75rem" }}>Failų medis</h2>
         <div style={{ maxHeight: 400, overflowY: "auto", border: "1px solid #ccc", padding: 8 }}>
           {tree ? (
             <TreeNode node={tree} onFileClick={handleFileClick} />
@@ -105,7 +105,7 @@ export default function FileBrowser() {
         {error && <div style={{ color: "red" }}>{error}</div>}
       </div>
       <div style={{ flex: 1 }}>
-        <h2 style={{ fontSize: "2em", marginBottom: "8px" }}>Failo turinys</h2>
+        <h2 style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "0.75rem" }}>Failo turinys</h2>
         {/* Aktyvaus failo pavadinimas */}
         {selectedFile && (
           <div style={{ fontWeight: "bold", marginBottom: "12px", color: "#ffd700" }}>{selectedFile}</div>

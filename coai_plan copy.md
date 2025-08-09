@@ -10,6 +10,9 @@
 
 [ ] A.8. Implementation of UI design and file browser centralization/optimization plans:
     | 2025-08-09, AI agent, reason: centralized UI improvement and file browser UX enhancement
+    [x] A.8.1. Dizaino pataisymai: pašalintos ikonos, mėlynos spalvos, subtilesnys šriftas | 2025-08-10, AI agent, reason: user request - minimalist design matching original
+    [x] A.8.2. Tikslaus pavyzdžio kopijos sukūrimas su SVG ikonų biblioteka | 2025-08-10, AI agent, reason: pixel-perfect UI template creation
+    [x] A.8.3. Dizaino atkūrimas po nesėkmingo eksperimento | 2025-08-10, AI agent, reason: rollback to working minimalist design
 
     **UI_CENTRAL_PLAN.md – UI Centralization Plan**
     [ ] 1. Color and Style Management: global CSS/Tailwind config, main colors, fonts, border radius, shadows, CSS variables or Tailwind themes.

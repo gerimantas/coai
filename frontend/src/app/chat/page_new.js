@@ -44,8 +44,8 @@ export default function ChatPage() {
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-white">
-      <div className="mt-[2%] mr-[2%] px-6 py-6">
-        <h1 className="text-lg font-medium mb-6">Chat</h1>
+      <div className="max-w-4xl mx-auto px-8 py-12">
+        <h1 className="text-3xl font-semibold mb-8">Chat</h1>
         
         {/* Project and File Selection */}
         <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6 mb-6">
@@ -55,7 +55,7 @@ export default function ChatPage() {
               <select 
                 value={project}
                 onChange={(e) => setProject(e.target.value)}
-                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="demo-project">Demo Project</option>
                 <option value="coai">COAI</option>
@@ -66,7 +66,7 @@ export default function ChatPage() {
               <select 
                 value={file}
                 onChange={(e) => setFile(e.target.value)}
-                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                className="w-full bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-3 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 <option value="main.py">main.py</option>
                 <option value="app.py">app.py</option>
@@ -88,7 +88,7 @@ export default function ChatPage() {
                 <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-xs lg:max-w-md px-4 py-3 rounded-lg ${
                     message.role === 'user' 
-                      ? 'bg-gray-600 text-white' 
+                      ? 'bg-blue-600 text-white' 
                       : 'bg-[#2a2a2a] text-gray-100'
                   }`}>
                     <p className="text-sm whitespace-pre-wrap">{message.text}</p>
@@ -129,14 +129,14 @@ export default function ChatPage() {
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Type your message here..."
-              className="flex-1 bg-[#0f0f0f] border border-[#2a2a2a] rounded-2xl px-4 py-3 text-[#82ffa2] placeholder-gray-400 focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none text-[104%]"
-              rows="5"
+              className="flex-1 bg-[#0f0f0f] border border-[#2a2a2a] rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+              rows="3"
               disabled={loading}
             />
             <button
               type="submit"
               disabled={loading || !input.trim()}
-              className="px-6 py-3 bg-[#949494] hover:bg-[#949494] disabled:bg-[#949494] disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
             >
               {loading ? 'Sending...' : 'Send'}
             </button>

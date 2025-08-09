@@ -48,6 +48,11 @@ Create a modern, centrally managed UI so that design and functionality changes a
 
 ## Actions
 1. Create and configure global style file and Tailwind theme.
+	- Ensure globals.css exists and is imported in _app.js/layout.js.
+	- Define main colors, fonts, border radius, shadows, and CSS variables for dark/light mode in globals.css and tailwind.config.js.
+	- Use Tailwind dark theme template as a reference for color palette and component styling.
+	- Analyze and refactor chat page styles and components to use centralized theme and global styles.
+	- Recommendation: Chat page should use Tailwind dark theme, consistent spacing, and shared UI components (Button, Card, etc.).
 2. Refactor existing pages to use shared UI components.
 3. Create main layout component and apply to all pages.
 4. Create and use shared navigation, status, notification components.
