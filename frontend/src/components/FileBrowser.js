@@ -65,16 +65,28 @@ export default function FileBrowser() {
       .catch(() => setError("Nepavyko gauti failų medžio"));
   }, []);
 
+  const MAX_SIZE = 100 * 1024; // 100 KB
   const handleFileClick = (filename) => {
     setSelectedFile(filename);
     setLoading(true);
     setError("");
-    fetch(`http://localhost:5000/api/files/${encodeURIComponent(filename)}`)
+    // Normalizuojame kelią: pakeičiame \ į / ir pašaliname 'coai/' pradžioje
+    let normalized = filename.replace(/\\/g, "/");
+    if (normalized.startsWith("coai/")) {
+      normalized = normalized.slice(5);
+    }
+    fetch(`http://localhost:5000/api/files/${encodeURIComponent(normalized)}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failo skaitymo klaida");
         return res.json();
       })
-      .then((data) => setFileContent(data.content))
+      .then((data) => {
+        if (data.content && data.content.length > MAX_SIZE) {
+          setFileContent(data.content.slice(0, MAX_SIZE) + "\n--- Failas per didelis, rodomi tik pirmi 100 KB ---");
+        } else {
+          setFileContent(data.content);
+        }
+      })
       .catch(() => setError("Nepavyko perskaityti failo"))
       .finally(() => setLoading(false));
   };
@@ -93,14 +105,26 @@ export default function FileBrowser() {
         {error && <div style={{ color: "red" }}>{error}</div>}
       </div>
       <div style={{ flex: 1 }}>
-        <h2>Failo turinys</h2>
+        <h2 style={{ fontSize: "2em", marginBottom: "8px" }}>Failo turinys</h2>
+        {/* Aktyvaus failo pavadinimas */}
+        {selectedFile && (
+          <div style={{ fontWeight: "bold", marginBottom: "12px", color: "#ffd700" }}>{selectedFile}</div>
+        )}
         {loading ? (
           <div>Įkeliama...</div>
+        ) : error ? (
+          <div style={{ color: "red" }}>{error}</div>
+        ) : (selectedFile ? (
+          fileContent && fileContent.trim() !== "" ? (
+            <pre style={{ background: "#222", color: "#eee", padding: "16px", borderRadius: "8px", minHeight: "200px" }}>
+              {fileContent}
+            </pre>
+          ) : (
+            <div style={{ color: "#aaa" }}>(Tuščias failas)</div>
+          )
         ) : (
-          <pre style={{ background: "#222", color: "#eee", padding: 16, minHeight: 300 }}>
-            {fileContent || (selectedFile ? "(Tuščias failas)" : "Pasirinkite failą iš medžio")}
-          </pre>
-        )}
+          <div style={{ color: "#aaa" }}>(Nepasirinktas failas)</div>
+        ))}
       </div>
     </div>
   );
