@@ -1,4 +1,4 @@
-## Ad Hoc / Additional Tasks
+# Ad Hoc / Additional Tasks
 
 [x] A.1. Atkurta ir aktyvuota tamsi UI tema (Tailwind dark mode), atnaujinti komponentų stiliai | 2025-08-07, AI agent, reason: user request
 [x] A.2. Orchestrator integravimas į routes.py ir testavimas | 2025-08-07, AI agent, reason: Stage 5 completion verification
@@ -7,6 +7,35 @@
 [x] A.5. Git istorijos išvalymas ir GitHub push problemos sprendimas | 2025-08-07, AI agent, reason: 147MB Next.js SWC file exceeded GitHub limits, created clean repository
 [x] A.6. Failų naršyklės lazy loading ir tree vizualizacijos optimizacija | 2025-08-09, AI agent, reason: performance & usability improvement
 [x] A.7. Backend path security enhancement for file access | 2025-08-09, AI agent, reason: security compliance
+
+[ ] A.8. Implementation of UI design and file browser centralization/optimization plans:
+    | 2025-08-09, AI agent, reason: centralized UI improvement and file browser UX enhancement
+
+    **UI_CENTRAL_PLAN.md – UI Centralization Plan**
+    [ ] 1. Color and Style Management: global CSS/Tailwind config, main colors, fonts, border radius, shadows, CSS variables or Tailwind themes.
+    [ ] 2. UI Component Library: shared components (`Button`, `Card`, `Tab`, `StatusBar`, `Loader`, `Alert`, `Sidebar`, `Toolbar`), clear props, all pages use these.
+    [ ] 3. Layout and Structure: main `Layout` component, common structure (sidebar, toolbar, statusbar, main content), all pages use this layout.
+    [ ] 4. Navigation: `Tab` or `NavBar` component, active tab highlighting, centralized style/functionality.
+    [ ] 5. Dark/Light Mode: support via Tailwind or CSS variables, affects all components.
+    [ ] 6. Responsiveness: all components responsive, layout adapts to screen size.
+    [ ] 7. Centralized Functionality: status, notifications, loaders, errors via shared components; API/user/project info via shared context (`React Context`/`zustand`).
+    [ ] 8. Icons and Visuals: shared icon library (Heroicons, FontAwesome), integrated via props.
+    [ ] 9. Documentation: document component usage, props, style change principles in README/UI guidelines.
+    [ ] Actions: create/configure global style/theme, refactor pages to use shared components, create/apply layout, navigation, status, notification components, document UI change principles.
+    [ ] Result: any design/functionality changes are applied to the entire UI quickly and centrally.
+    [UI_CENTRAL_PLAN.md](UI_CENTRAL_PLAN.md)
+
+    **UI_FILES_OPTIMIZATION.md – UI Files Page Optimization Proposals**
+    [ ] 1. Lazy Loading: load only opened folders, not entire tree; improves load time/performance.
+    [ ] 2. Large File Content Limiting: show part of large files or warning; prevents UI slowdown.
+    [ ] 3. File Search: add search box for quick file/folder finding.
+    [ ] 4. Multiple File Preview: allow opening multiple files (tabs) for comparison/multitasking.
+    [ ] 5. Context Menu: right-click menu with actions (download, copy path, delete).
+    [ ] 6. Skeleton Loader: visual skeleton loader instead of "Loading..." for modern UI.
+    [ ] 7. Error Handling: clearer messages for inaccessible files, permission denied, errors.
+    [ ] 8. Style and UX: more Tailwind/other UI framework styles for modern, user-friendly browser.
+    [ ] 9. Breadcrumbs Navigation: show full path at top for easy folder navigation.
+    [UI_FILES_OPTIMIZATION.md](UI_FILES_OPTIMIZATION.md)
 # Stage I: Minimal Working COAI Core (MVP)
 
 ---
@@ -130,16 +159,17 @@ Allow the backend to read basic project files.
 
 ---
 
-## [ ] 8. Project management module (single project, backend)
+
+## [x] 8. Project management module (single project, backend) | 2025-08-09, AI agent, reason: Backend .coai failų skaitymas/rašymas įgyvendintas, UI rodo aktyvaus projekto informaciją
 
 ### Goal
 Manage project meta-information and COAI files (single-project mode).
 
 ### Instructions
-1. [ ] Use a single `.coai` directory for the project:  
-    `C:\ai_projects\coai\.coai`
-2. [ ] In the backend, implement basic .coai file read/write (plans, logs)
-3. [ ] In the frontend, show active project info (dummy for MVP)
+1. [x] Use a single `.coai` directory for the project:  
+    `C:\ai_projects\coai\.coai` | 2025-08-09, AI agent
+2. [x] In the backend, implement basic .coai file read/write (plans, logs) | 2025-08-09, AI agent (API endpointai /api/coai/<filename> GET/POST)
+3. [x] In the frontend, show active project info (dummy for MVP) | 2025-08-09, AI agent (UI blokas MainContent.js)
 
 ---
 
