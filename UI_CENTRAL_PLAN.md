@@ -1,58 +1,84 @@
-# COAI UI Centralizuoto Dizaino ir Funkcionalumo Planas
 
-## Tikslas
-Sukurti modernų, centralizuotai valdomą UI, kad dizaino ir funkcionalumo pakeitimai būtų lengvai pritaikomi visiems puslapiams.
+# COAI UI Centralized Design and Functionality Plan
 
----
-
-## 1. Spalvų ir stilių valdymas
-- Sukurti globalų CSS/Tailwind konfigūraciją (`globals.css`, `tailwind.config.js`).
-- Apibrėžti pagrindines spalvas, šriftus, border radius, shadow ir kt.
-- Naudoti CSS kintamuosius arba Tailwind custom themes.
-
-## 2. UI komponentų biblioteka
-- Sukurti bendrų komponentų katalogą: `Button`, `Card`, `Tab`, `StatusBar`, `Loader`, `Alert`, `Sidebar`, `Toolbar`.
-- Visi puslapiai naudoja tik šiuos komponentus.
-- Komponentai turi aiškias props (pvz., spalva, dydis, variantas).
-
-## 3. Layout ir struktūra
-- Sukurti pagrindinį „Layout“ komponentą (`layout.js`).
-- Apibrėžti bendrą struktūrą: sidebar, toolbar, statusbar, pagrindinis turinys.
-- Visi puslapiai naudoja šį layout.
-
-## 4. Navigacija
-- Sukurti `Tab` arba `NavBar` komponentą su aktyvaus tab išskyrimu.
-- Navigacijos stilius ir funkcionalumas valdomi per vieną komponentą.
-
-## 5. Dark/Light režimas
-- Palaikyti dark/light režimą per Tailwind arba CSS kintamuosius.
-- Režimo keitimas paveikia visus komponentus.
-
-## 6. Responsyvumas
-- Visi komponentai turi būti responsyvūs.
-- Layout automatiškai prisitaiko prie ekrano dydžio.
-
-## 7. Funkcionalumo centralizavimas
-- Statuso, pranešimų, loaderių, klaidų rodymas – per bendrus komponentus.
-- API užklausos, vartotojo duomenys, projekto informacija – per bendrą kontekstą (`React Context` arba `zustand` store).
-
-## 8. Ikonų ir vizualų naudojimas
-- Naudoti bendrą ikonų biblioteką (pvz., Heroicons, FontAwesome).
-- Ikonos ir vizualai integruoti į komponentus per props.
-
-## 9. Dokumentacija
-- Aprašyti UI komponentų naudojimą, props ir stilių keitimo principus README arba atskirame UI guideline faile.
+## Goal
+Create a modern, centrally managed UI so that design and functionality changes are easily applied to all pages.
 
 ---
 
-## Veiksmai
-1. Sukurti ir sukonfigūruoti globalų stilių failą ir Tailwind temą.
-2. Refaktoruoti esamus puslapius, kad naudotų bendrus UI komponentus.
-3. Sukurti pagrindinį layout komponentą ir pritaikyti visiems puslapiams.
-4. Sukurti ir naudoti bendrus navigacijos, statuso, pranešimų komponentus.
-5. Aprašyti ir dokumentuoti UI keitimo principus.
+## 1. Color and Style Management
+- Create global CSS/Tailwind configuration (`globals.css`, `tailwind.config.js`).
+- Define main colors, fonts, border radius, shadow, etc.
+- Use CSS variables or Tailwind custom themes.
+
+## 2. UI Component Library
+- Create a shared components directory: `Button`, `Card`, `Tab`, `StatusBar`, `Loader`, `Alert`, `Sidebar`, `Toolbar`.
+- All pages use only these components.
+- Components have clear props (e.g., color, size, variant).
+
+## 3. Layout and Structure
+- Create a main `Layout` component (`layout.js`).
+- Define common structure: sidebar, toolbar, statusbar, main content.
+- All pages use this layout.
+
+## 4. Navigation
+- Create a `Tab` or `NavBar` component with active tab highlighting.
+- Navigation style and functionality managed in one component.
+
+## 5. Dark/Light Mode
+- Support dark/light mode via Tailwind or CSS variables.
+- Mode switching affects all components.
+
+## 6. Responsiveness
+- All components must be responsive.
+- Layout automatically adapts to screen size.
+
+## 7. Centralized Functionality
+- Status, notifications, loaders, errors are shown via shared components.
+- API calls, user data, project info are managed via shared context (`React Context` or `zustand` store).
+
+## 8. Icons and Visuals
+- Use a shared icon library (e.g., Heroicons, FontAwesome).
+- Icons and visuals integrated into components via props.
+
+## 9. Documentation
+- Document UI component usage, props, and style change principles in README or a separate UI guideline file.
 
 ---
 
-## Rezultatas
-Bet kokie dizaino ar funkcionalumo pakeitimai bus pritaikomi visam UI centralizuotai ir greitai.
+## Actions
+1. Create and configure global style file and Tailwind theme.
+2. Refactor existing pages to use shared UI components.
+3. Create main layout component and apply to all pages.
+4. Create and use shared navigation, status, notification components.
+5. Document UI change principles.
+
+---
+
+## Recommended UI Folder and File Structure
+
+```
+frontend/
+	src/
+		app/
+			globals.css         # Global styles and CSS variables
+			layout.js           # Main Layout component
+			page.js             # Main page
+			chat/page.js        # Chat page
+			...                 # Other pages
+		components/
+			Button.js           # Shared button component
+			Card.js             # Shared card component
+			Tab.js              # Navigation tab component
+			StatusBar.js        # Status bar
+			Sidebar.js          # Sidebar
+			Toolbar.js          # Toolbar
+			Loader.js           # Loader component
+			Alert.js            # Notification/alert component
+			...                 # Other shared components
+```
+
+All pages and UI elements use only these shared components and global styles. Any design or functionality changes are applied centrally and instantly across the entire UI.
+
+## Result
+Any design or functionality changes are applied to the entire UI quickly and centrally.
