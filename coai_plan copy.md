@@ -183,8 +183,8 @@ Check if the full MVP flow works.
 
 ### Instructions
 1. [ ] In the project `README.md`, briefly describe launch and main usage instructions.
-2. [ ] Add basic unit tests for backend (`pytest`), frontend (e.g., React Testing Library)
-3. [ ] Test end-to-end flow: message from UI goes through backend to agent and back to UI
+2. [x] Add basic unit tests for backend (`pytest`), frontend (e.g., React Testing Library)
+3. [x] Test end-to-end flow: message from UI goes through backend to agent and back to UI
 4. [ ] Code samples and comments – in English or bilingual
 
 ---

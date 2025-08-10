@@ -91,7 +91,7 @@ export default function ChatPage() {
                       ? 'bg-gray-600 text-white' 
                       : 'bg-[#2a2a2a] text-gray-100'
                   }`}>
-                    <p className="text-sm whitespace-pre-wrap">{message.text}</p>
+                    <p className="text-sm whitespace-pre-wrap" data-testid={message.role === 'ai' ? 'ai-message' : 'user-message'}>{message.text}</p>
                   </div>
                 </div>
               ))}
@@ -116,7 +116,7 @@ export default function ChatPage() {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6">
+          <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6" data-testid="error-message">
             <p className="text-red-300 text-sm">{error}</p>
           </div>
         )}

@@ -12,9 +12,28 @@ def index():
 logger = logging.getLogger("coai")
 class OrchestratorStub:
     def process_chat_request(self, message, context):
-        return {"request_id": "stub", "message": message, "context": context}
+        if len(message) > 10000:
+            return {
+                "error": "Message too long (max 10000 characters)",
+                "status": "orchestrator_error"
+            }
+        return {
+            "request_id": "stub",
+            "reply": f"Echo: {message}",
+            "original_message": message,
+            "context": context,
+            "metadata": {},
+            "status": "completed",
+            "error": False,
+            "debug": {"stub": True}
+        }
     def get_orchestrator_status(self):
-        return {"status": "stub"}
+        return {
+            "orchestrator_status": "stub",
+            "components": {"preprocessor": "ready", "logger": "ready", "ai_agents": "ready"},
+            "version": "stub",
+            "capabilities": ["chat_request_processing", "prompt_preprocessing", "request_logging", "ai_agent_integration"]
+        }
 orchestrator = OrchestratorStub()
 class CoaiLoggerStub:
     def get_chat_history(self, limit):
