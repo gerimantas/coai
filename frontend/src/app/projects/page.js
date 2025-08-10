@@ -80,7 +80,7 @@ const ProjectsPage = () => {
               {projects.map((name) => (
                 <li key={name}>
                   <button
-                    className={`w-full text-left px-4 py-2 rounded-lg border border-[#2a2a2a] ${selected === name ? "bg-blue-700" : "bg-[#222]"}`}
+                    className={`w-full text-left px-4 py-2 rounded-lg border border-[#2a2a2a] ${selected === name ? "bg-[#8b0000]" : "bg-[#222]"}`}
                     onClick={() => handleSelect(name)}
                   >
                     {name}
@@ -90,21 +90,23 @@ const ProjectsPage = () => {
             </ul>
           )}
           {selected && details && (
-            <div className="mt-6 p-4 bg-[#222] rounded-lg border border-[#2a2a2a]">
-              <p className="text-sm mb-2">Selected project: <span className="font-bold">{details.name}</span></p>
-              <p className="text-xs text-gray-400 mb-2">{details.description}</p>
-              <p className="text-xs text-gray-400 mb-2">Created: {details.created}</p>
-              <p className="text-xs text-gray-400 mb-2">Status: <span className="font-bold text-green-400">{status}</span></p>
-              <div className="flex flex-wrap gap-2 mt-4">
-                <button className="bg-blue-700 px-3 py-1 rounded text-xs" onClick={handleOpen}>Open</button>
-                <button className="bg-red-700 px-3 py-1 rounded text-xs" onClick={handleDelete}>Delete</button>
-                <button className="bg-yellow-700 px-3 py-1 rounded text-xs" onClick={handleEdit}>Edit Config</button>
-                <button className="bg-gray-700 px-3 py-1 rounded text-xs" onClick={handleFiles}>Files</button>
-                <button className="bg-green-700 px-3 py-1 rounded text-xs" onClick={handleExport}>Export</button>
-                <button className="bg-purple-700 px-3 py-1 rounded text-xs" onClick={handleImport}>Import</button>
-                <button className="bg-pink-700 px-3 py-1 rounded text-xs" onClick={handleMigrate}>Migrate</button>
+            <>
+              <div className="mt-6 p-4 rounded-lg border border-[#2a2a2a]" style={{ backgroundColor: '#0f0f0f' }}>
+                <p className="text-sm mb-2">Selected project: <span className="font-bold">{details.name}</span></p>
+                <p className="text-xs text-gray-400 mb-2">{details.description}</p>
+                <p className="text-xs text-gray-400 mb-2">Created: {details.created}</p>
+                <p className="text-xs text-gray-400 mb-2">Status: <span className="font-bold text-green-400">{status}</span></p>
               </div>
-            </div>
+              <div className="flex flex-wrap gap-2 mt-4 p-4 rounded-lg border border-[#2a2a2a]" style={{ backgroundColor: '#8b0000' }}>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleOpen}>Open</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleDelete}>Delete</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleEdit}>Edit Config</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleFiles}>Files</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleExport}>Export</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleImport}>Import</button>
+                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleMigrate}>Migrate</button>
+              </div>
+            </>
           )}
         </div>
       </div>
