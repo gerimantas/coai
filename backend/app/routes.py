@@ -40,6 +40,10 @@ class CoaiLoggerStub:
         return []
 coai_logger = CoaiLoggerStub()
 
+from app.rules_loader import load_agent_rules, RULES_PATH
+import threading
+rules_lock = threading.Lock()
+current_agent_rules = load_agent_rules()
 
 # --- Main chat endpoint using orchestrator ---
 @bp.route("/api/chat", methods=["POST"])
@@ -68,6 +72,9 @@ def chat():
         
         # Use orchestrator for full processing
         logger.info(f"Processing chat request through orchestrator - Project: {project}, File: {file}")
+        # Inject current rules into context
+        with rules_lock:
+            context["agent_rules"] = current_agent_rules
         response = orchestrator.process_chat_request(message, context)
         
         # Check if orchestrator returned an error
@@ -78,6 +85,10 @@ def chat():
         logger.info(f"Chat request {response.get('request_id')} completed successfully")
         
         return jsonify(response)
+
+
+    # --- Dynamic rules reload endpoint ---
+
         
     except Exception as e:
         logger.error(f"Error in chat endpoint: {str(e)}")
@@ -87,6 +98,20 @@ def chat():
             "details": str(e),
             "status": "endpoint_error"
         }), 500
+
+# --- Dynamic rules reload endpoint ---
+@bp.route("/api/rules/reload", methods=["POST"])
+def reload_agent_rules():
+    """Reload agent rules from file and update in memory (no restart)"""
+    global current_agent_rules
+    try:
+        with rules_lock:
+            current_agent_rules = load_agent_rules()
+        logger.info("Agent rules reloaded dynamically.")
+        return jsonify({"success": True, "message": "Agent rules reloaded."})
+    except Exception as e:
+        logger.error(f"Failed to reload agent rules: {str(e)}")
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 # --- Chat history endpoint ---

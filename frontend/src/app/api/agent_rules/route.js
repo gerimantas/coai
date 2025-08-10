@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import path from "path";
 import fs from "fs";
 
-const RULES_PATH = path.resolve(process.cwd(), ".coai/rules/agent_rules.txt");
+const RULES_PATH = path.join(__dirname, "../../../../.coai/rules/agent_rules.txt");
 
 export async function GET() {
   let rules = "";

@@ -9,6 +9,7 @@ const RulesEditor = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
+  const [reloadStatus, setReloadStatus] = useState("");
 
   useEffect(() => {
     fetch(RULES_API)
@@ -35,6 +36,13 @@ const RulesEditor = () => {
       });
       if (res.ok) {
         setSuccess(true);
+        // Reload rules in backend
+        const reloadRes = await fetch("/api/rules/reload", { method: "POST" });
+        if (reloadRes.ok) {
+          setReloadStatus("Rules reloaded in backend.");
+        } else {
+          setReloadStatus("Failed to reload rules in backend.");
+        }
       } else {
         setError("Failed to save rules");
       }
@@ -56,7 +64,7 @@ const RulesEditor = () => {
             value={rules}
             onChange={(e) => setRules(e.target.value)}
             spellCheck={false}
-            style={{ fontSize: "1rem" }}
+            style={{ fontSize: "1rem", color: "#ffe066" }}
           />
           <div className="mt-4 flex gap-2">
             <button
@@ -67,6 +75,7 @@ const RulesEditor = () => {
               {saving ? "Saving..." : "Save"}
             </button>
             {success && <span className="text-green-400">Saved!</span>}
+            {reloadStatus && <span className="text-blue-400">{reloadStatus}</span>}
             {error && <span className="text-red-400">{error}</span>}
           </div>
         </>
