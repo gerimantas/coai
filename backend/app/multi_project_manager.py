@@ -7,7 +7,7 @@ Provides management for multiple projects, including listing, selecting, and mig
 import os
 from typing import List
 
-PROJECTS_DIR = os.path.join(os.path.dirname(__file__), '../../projects')
+PROJECTS_DIR = r'C:\ai_projects'
 
 class MultiProjectManager:
     def __init__(self, projects_dir: str = PROJECTS_DIR):

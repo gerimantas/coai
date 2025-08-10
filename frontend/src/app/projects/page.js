@@ -24,14 +24,30 @@ const ProjectsPage = () => {
 
   useEffect(() => {
     if (selected) {
-      // Simulate fetching project details
-      setDetails({
-        name: selected,
-        description: "Demo project description.",
-        created: "2025-08-10",
-        status: "active",
-      });
-      setStatus("active");
+      fetch(`/api/project-details?name=${encodeURIComponent(selected)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setDetails({
+            name: selected,
+            description: data.config?.description || "No description.",
+            created: data.config?.created || "Unknown",
+            status: data.config?.status || "unknown",
+            rules: data.rules || "No rules.",
+            plan: data.plan || "No plan.",
+          });
+          setStatus(data.config?.status || "unknown");
+        })
+        .catch(() => {
+          setDetails({
+            name: selected,
+            description: "Failed to load details.",
+            created: "Unknown",
+            status: "unknown",
+            rules: "",
+            plan: "",
+          });
+          setStatus("unknown");
+        });
     } else {
       setDetails(null);
       setStatus(null);
@@ -60,8 +76,24 @@ const ProjectsPage = () => {
   const handleImport = () => {
     alert(`Import project`);
   };
-  const handleMigrate = () => {
-    alert(`Migrate project: ${selected}`);
+  const handleMigrate = async () => {
+    const src = prompt("Enter source directory to migrate:");
+    if (!src || !selected) return;
+    try {
+      const res = await fetch("/api/migrate_project", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ src, name: selected }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert(`Migration successful! New project at: ${data.dest}`);
+      } else {
+        alert(`Migration failed: ${data.error}`);
+      }
+    } catch (e) {
+      alert(`Migration error: ${e.message}`);
+    }
   };
 
   return (

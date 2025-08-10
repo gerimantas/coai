@@ -16,10 +16,12 @@ const menuItems = [
     name: 'Manage',
     items: [
       { name: 'Projects', href: '/projects' },
+      { name: 'Agent Rules', href: '/rules' },
       { name: 'Usage', href: '/usage' },
       { name: 'API keys', href: '/api-keys' },
       { name: 'Logs', href: '/logs' },
-      { name: 'Settings', href: '/settings' }
+      { name: 'Settings', href: '/settings' },
+      { name: 'Task Progress', href: '/progress' }
     ]
   }
 ];

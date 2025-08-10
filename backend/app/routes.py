@@ -2,7 +2,10 @@ from flask import Blueprint, jsonify, request, abort
 import os
 import logging
 from datetime import datetime
+from app.progress_tracker import ProgressTracker
 bp = Blueprint("app", __name__)
+
+progress_tracker = ProgressTracker()
 
 @bp.route('/')
 def index():
@@ -198,3 +201,21 @@ def orchestrator_status():
     except Exception as e:
         logger.error(f"Error getting orchestrator status: {str(e)}")
         return jsonify({"error": "Failed to get orchestrator status"}), 500
+
+@bp.route('/api/progress/<task_id>', methods=['GET'])
+def get_progress(task_id):
+    status = progress_tracker.get_progress(task_id)
+    return jsonify({"task_id": task_id, "status": status})
+
+@bp.route('/api/progress/<task_id>', methods=['POST'])
+def set_progress(task_id):
+    data = request.get_json()
+    status = data.get("status")
+    if not status:
+        abort(400, "Missing status")
+    progress_tracker.set_progress(task_id, status)
+    return jsonify({"task_id": task_id, "status": status})
+
+@bp.route('/api/progress', methods=['GET'])
+def get_all_progress():
+    return jsonify(progress_tracker.get_all_progress())

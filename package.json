@@ -14,6 +14,8 @@
   "private": true,
   "dependencies": {
     "@heroicons/react": "^2.2.0",
-    "@tailwindcss/postcss": "^4.1.11"
+    "@tailwindcss/postcss": "^4.1.11",
+    "codemirror": "^5.65.20",
+    "react-codemirror2": "^8.0.1"
   }
 }

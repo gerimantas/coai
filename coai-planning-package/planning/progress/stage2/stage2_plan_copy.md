@@ -10,9 +10,9 @@
 - 11.2 [x] Edit rules via UI (syntax highlighting)
 - 11.3 [x] Apply changes dynamically (no restart)
 - 11.4 [x] Per-agent and global rules support
-- 11.5 [ ] Rules tests (load/apply/persist)
+- 11.5 [x] Rules tests (load/apply/persist)
 - 12.1 [ ] Action plan generation for larger tasks
-- 12.2 [ ] Step progress tracking
+- 12.2 [x] Step progress tracking
 - 12.3 [ ] UI progress filters (e.g., incomplete only)
 - 12.4 [ ] Integration with plan copy/markers
 - 12.5 [ ] Multi-step plan tests
