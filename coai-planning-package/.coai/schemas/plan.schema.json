@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "COAI Master Plan (Markdown mirror)",
+  "type": "object",
+  "properties": {
+    "stages": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "stages"
+  ]
+}

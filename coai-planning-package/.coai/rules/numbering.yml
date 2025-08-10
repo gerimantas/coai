@@ -1,0 +1,10 @@
+stages:
+  "I":   { range: [1, 9] }
+  "II":  { range: [10, 15] }
+  "III": { range: [16, 24] }
+ad_hoc:
+  per_section: allow
+  global_suffix: "A"
+rules:
+  enforce_monotonic: true
+  deny_duplicates: true

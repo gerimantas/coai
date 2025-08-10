@@ -1,0 +1,4 @@
+allow_checkbox_in_copies_only: true
+forbid_edit_master: true
+forbid_edit_versions: true
+forbid_edit_stage_plan: true

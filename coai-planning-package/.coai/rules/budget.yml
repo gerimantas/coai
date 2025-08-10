@@ -1,0 +1,4 @@
+limits:
+  monthly_usd: 50
+  warn_at_percent: 80
+  hard_stop_percent: 120
