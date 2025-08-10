@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import PageContainer from "@/components/ui/PageContainer";
 
 const TASKS = [
 	{ id: "12.2", name: "Step progress tracking" },
@@ -36,35 +37,31 @@ export default function ProgressPage() {
 	}, []);
 
 	return (
-		<div className="min-h-screen bg-[#0f0f0f] text-white">
-			<div className="mt-[2%] mr-[2%] px-6 py-6">
-				<h1 className="text-lg font-medium mb-6">Task Progress</h1>
-				<div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6">
-					<ul className="space-y-2">
-						{TASKS.map((task) => (
-							<li
-								key={task.id}
-								className="flex items-center justify-between px-4 py-2 rounded-lg border border-[#2a2a2a] bg-[#222]"
-							>
-								<span className="text-base text-white font-normal">
-									{task.name}
-								</span>
-								<span
-									className={`text-sm px-3 py-1 rounded font-medium ${
-										progress[task.id] === "Completed"
-											? "bg-green-700 text-white"
-											: progress[task.id] === "In Progress"
-											? "bg-yellow-700 text-white"
-											: "bg-gray-700 text-gray-300"
-									}`}
-								>
-									{progress[task.id] || "Not Started"}
-								</span>
-							</li>
-						))}
-					</ul>
-				</div>
-			</div>
-		</div>
+		<PageContainer>
+			<h1 className="text-lg font-medium mb-6">Task Progress</h1>
+			<ul className="space-y-2">
+				{TASKS.map((task) => (
+					<li
+						key={task.id}
+						className="flex items-center justify-between px-4 py-2 rounded-lg border border-[#2a2a2a] bg-[#222]"
+					>
+						<span className="text-base text-white font-normal">
+							{task.name}
+						</span>
+						<span
+							className={`text-sm px-3 py-1 rounded font-medium ${
+								progress[task.id] === "Completed"
+									? "bg-green-700 text-white"
+									: progress[task.id] === "In Progress"
+									? "bg-yellow-700 text-white"
+									: "bg-gray-700 text-gray-300"
+							}`}
+						>
+							{progress[task.id] || "Not Started"}
+						</span>
+					</li>
+				))}
+			</ul>
+		</PageContainer>
 	);
 }
