@@ -74,7 +74,8 @@ def chat():
         logger.info(f"Processing chat request through orchestrator - Project: {project}, File: {file}")
         # Inject current rules into context
         with rules_lock:
-            context["agent_rules"] = current_agent_rules
+            context["global_rules"] = current_agent_rules.get('global', [])
+            context["agent_rules"] = current_agent_rules.get('agents', {})
         response = orchestrator.process_chat_request(message, context)
         
         # Check if orchestrator returned an error

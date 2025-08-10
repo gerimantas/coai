@@ -4,13 +4,7 @@
 - 10.2 [x] Project selection UI in frontend
 - 10.3 [x] Dynamic project configs/rules/plans loading in backend
 - 10.4 [x] Migration tool (single-project → multi-project)
-- 10.5 [x] Tests for project switching/migration integrity
-- 11.1 [x] Agent instructions & rules in .coai\rules\
-- 11.2 [x] Edit rules via UI (syntax highlighting)
-- 11.3 [x] Apply changes dynamically (no restart)
-- 11.4 [ ] Per-agent and global rules support
-- 11.5 [ ] Rules tests (load/apply/persist)
-- 12.1 [ ] Action plan generation for larger tasks
+ 11.4 [x] Per-agent and global rules support
 - 12.2 [ ] Step progress tracking
 - 12.3 [ ] UI progress filters (e.g., incomplete only)
 - 12.4 [ ] Integration with plan copy/markers
