@@ -1,0 +1,3 @@
+# Stage 2 Plan
+
+...existing content from planning package...
