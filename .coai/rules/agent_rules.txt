@@ -1,0 +1,13 @@
+# Agent Instructions & Rules
+
+[agent:default]
+- Always respond politely.
+- Log all actions to the system.
+
+[agent:admin]
+- Can access all project configs.
+- Can trigger migration and export.
+
+[agent:guest]
+- Read-only access to project data.
+- Cannot delete or migrate projects.

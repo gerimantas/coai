@@ -5,7 +5,7 @@
 - 10.3 [x] Dynamic project configs/rules/plans loading in backend
 - 10.4 [x] Migration tool (single-project → multi-project)
 - 10.5 [x] Tests for project switching/migration integrity
-- 11.1 [ ] Agent instructions & rules in .coai\rules\
+- 11.1 [x] Agent instructions & rules in .coai\rules\
 - 11.2 [ ] Edit rules via UI (syntax highlighting)
 - 11.3 [ ] Apply changes dynamically (no restart)
 - 11.4 [ ] Per-agent and global rules support
