@@ -3,7 +3,7 @@
 - 10.1 [x] Multi-project management & migration
 - 10.2 [x] Project selection UI in frontend
 - 10.3 [x] Dynamic project configs/rules/plans loading in backend
-- 10.4 [ ] Migration tool (single-project → multi-project)
+- 10.4 [x] Migration tool (single-project → multi-project)
 - 10.5 [ ] Tests for project switching/migration integrity
 - 11.1 [ ] Agent instructions & rules in .coai\rules\
 - 11.2 [ ] Edit rules via UI (syntax highlighting)
