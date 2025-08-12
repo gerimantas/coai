@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Completely hide Next.js development indicators
+  devIndicators: false,
   // experimental options removed as per Next.js 15 warning
 };
 

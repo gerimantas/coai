@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import PageContainer from "@/components/ui/PageContainer";
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -97,52 +98,47 @@ const ProjectsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
-      <div className="mt-[2%] mr-[2%] px-6 py-6">
-        <h1 className="text-lg font-medium mb-6">Projects</h1>
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6">
-          {loading ? (
-            <p className="text-sm text-gray-400">Loading projects...</p>
-          ) : error ? (
-            <p className="text-sm text-red-400">{error}</p>
-          ) : projects.length === 0 ? (
-            <p className="text-sm text-gray-400">No projects found.</p>
-          ) : (
-            <ul className="space-y-2">
-              {projects.map((name) => (
-                <li key={name}>
-                  <button
-                    className={`w-full text-left px-4 py-2 rounded-lg border border-[#2a2a2a] ${selected === name ? "bg-[#8b0000]" : "bg-[#222]"}`}
-                    onClick={() => handleSelect(name)}
-                  >
-                    {name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-          {selected && details && (
-            <>
-              <div className="mt-6 p-4 rounded-lg border border-[#2a2a2a]" style={{ backgroundColor: '#0f0f0f' }}>
-                <p className="text-sm mb-2">Selected project: <span className="font-bold">{details.name}</span></p>
-                <p className="text-xs text-gray-400 mb-2">{details.description}</p>
-                <p className="text-xs text-gray-400 mb-2">Created: {details.created}</p>
-                <p className="text-xs text-gray-400 mb-2">Status: <span className="font-bold text-green-400">{status}</span></p>
-              </div>
-              <div className="flex flex-wrap gap-2 mt-4 p-4 rounded-lg border border-[#2a2a2a]" style={{ backgroundColor: '#8b0000' }}>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleOpen}>Open</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleDelete}>Delete</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleEdit}>Edit Config</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleFiles}>Files</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleExport}>Export</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleImport}>Import</button>
-                <button className="px-3 py-1 rounded text-xs" style={{ backgroundColor: '#8b0000' }} onClick={handleMigrate}>Migrate</button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+  <PageContainer title="Projects" subtitle="Select a project to view details and actions.">
+      {loading ? (
+        <p className="text-sm text-gray-400">Loading projects...</p>
+      ) : error ? (
+        <p className="text-sm text-red-400">{error}</p>
+      ) : projects.length === 0 ? (
+        <p className="text-sm text-gray-400">No projects found.</p>
+      ) : (
+        <ul className="space-y-2 max-h-[50vh] overflow-y-auto pr-1">
+          {projects.map((name) => (
+            <li key={name}>
+              <button
+                className={`w-full text-left px-4 py-2 rounded-lg border border-[var(--border)] ${selected === name ? "bg-[var(--background-tertiary)]" : "bg-[var(--background-secondary)]"}`}
+                onClick={() => handleSelect(name)}
+              >
+                {name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {selected && details && (
+        <>
+          <div className="mt-6 p-4 rounded-lg border border-[var(--border)] bg-[var(--background-secondary)]">
+            <p className="text-sm mb-2">Selected project: <span className="font-medium">{details.name}</span></p>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">{details.description}</p>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">Created: {details.created}</p>
+            <p className="text-xs text-[var(--foreground-muted)] mb-2">Status: <span className="px-2 py-0.5 rounded border border-green-700 text-green-200 bg-green-800/30">{status}</span></p>
+          </div>
+          <div className="flex flex-wrap gap-2 mt-4 p-4 rounded-lg border border-[var(--border)] bg-[var(--background-secondary)]">
+            <button className="px-3 py-1 rounded border border-blue-500 text-blue-400 hover:bg-blue-500/10 text-xs" onClick={handleOpen}>Open</button>
+            <button className="px-3 py-1 rounded text-xs bg-red-700 hover:bg-red-800" onClick={handleDelete}>Delete</button>
+            <button className="px-3 py-1 rounded text-xs bg-gray-700 hover:bg-gray-600" onClick={handleEdit}>Edit Config</button>
+            <button className="px-3 py-1 rounded text-xs bg-gray-700 hover:bg-gray-600" onClick={handleFiles}>Files</button>
+            <button className="px-3 py-1 rounded text-xs bg-teal-700 hover:bg-teal-800" onClick={handleExport}>Export</button>
+            <button className="px-3 py-1 rounded text-xs bg-teal-700 hover:bg-teal-800" onClick={handleImport}>Import</button>
+            <button className="px-3 py-1 rounded text-xs bg-purple-700 hover:bg-purple-800" onClick={handleMigrate}>Migrate</button>
+          </div>
+        </>
+      )}
+    </PageContainer>
   );
 };
 

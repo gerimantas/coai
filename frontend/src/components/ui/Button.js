@@ -4,11 +4,11 @@
 import React from "react";
 
 export default function Button({ children, variant = "primary", as = "button", className = "", ...props }) {
-  const base = "px-6 py-3 rounded-lg font-medium border transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 shadow-sm hover:shadow-md";
+  const base = "px-4 py-2 rounded-md font-medium border transition-colors duration-150 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:opacity-50";
   const variants = {
-    primary: "bg-blue-600 text-white border-blue-600 hover:bg-blue-700 hover:border-blue-700 active:bg-blue-800",
-    secondary: "bg-gray-700 text-gray-100 border-gray-600 hover:bg-gray-600 hover:border-gray-500 active:bg-gray-500",
-    danger: "bg-red-600 text-white border-red-600 hover:bg-red-700 hover:border-red-700 active:bg-red-800"
+    primary: "bg-transparent text-blue-400 border-blue-500 hover:bg-blue-500/10",
+    secondary: "bg-transparent text-[var(--foreground)] border-[var(--border)] hover:bg-white/5",
+    danger: "bg-transparent text-red-400 border-red-600 hover:bg-red-600/10"
   };
   const Comp = as;
   const extraProps = {};

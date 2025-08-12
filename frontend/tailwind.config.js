@@ -23,9 +23,31 @@ module.exports = {
         },
         border: '#27272a',
         card: '#23232b',
+        // COAI Design System Colors
+        'coai-primary': 'var(--primary)',
+        'coai-success': 'var(--success)',
+        'coai-warning': 'var(--warning)',
+        'coai-error': 'var(--error)',
+        'coai-info': 'var(--info)',
+      },
+      spacing: {
+        // COAI Design System Spacing
+        'coai-xs': 'var(--spacing-xs)',
+        'coai-sm': 'var(--spacing-sm)',
+        'coai-md': 'var(--spacing-md)',
+        'coai-lg': 'var(--spacing-lg)',
+        'coai-xl': 'var(--spacing-xl)',
+        'coai-2xl': 'var(--spacing-2xl)',
+        'coai-3xl': 'var(--spacing-3xl)',
       },
       borderRadius: {
         xl: '1rem',
+        // COAI Design System Radius
+        'coai-sm': 'var(--radius-sm)',
+        'coai-md': 'var(--radius-md)',
+        'coai-lg': 'var(--radius-lg)',
+        'coai-xl': 'var(--radius-xl)',
+        'coai-2xl': 'var(--radius-2xl)',
       },
       boxShadow: {
         card: '0 2px 8px 0 rgba(0,0,0,0.15)',

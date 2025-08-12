@@ -37,31 +37,36 @@ export default function ProgressPage() {
 	}, []);
 
 	return (
-		<PageContainer>
-			<h1 className="text-lg font-medium mb-6">Task Progress</h1>
-			<ul className="space-y-2">
+		<PageContainer title="Task Progress" subtitle="Overview of planned tasks and their current status.">
+			<div className="max-h-[60vh] overflow-y-auto pr-1">
+				<div className="grid grid-cols-[1fr_auto] gap-4 px-4 py-2 text-xs uppercase tracking-wide text-[var(--foreground-muted)] sticky top-0 bg-[var(--card)] border-b border-[var(--border)]">
+					<span>Task</span>
+					<span>Status</span>
+				</div>
+				<ul className="space-y-2">
 				{TASKS.map((task) => (
 					<li
 						key={task.id}
-						className="flex items-center justify-between px-4 py-2 rounded-lg border border-[#2a2a2a] bg-[#222]"
+								className="flex items-center justify-between gap-4 px-4 py-2 rounded-lg border border-[var(--border)] bg-[var(--background-secondary)] odd:bg-[var(--background-light)] hover:bg-[var(--background-tertiary)] min-h-[40px]"
 					>
-						<span className="text-base text-white font-normal">
+							<span className="text-sm text-[var(--foreground)]">
 							{task.name}
 						</span>
 						<span
-							className={`text-sm px-3 py-1 rounded font-medium ${
+							className={`text-xs md:text-sm px-3 py-1 rounded font-medium border ${
 								progress[task.id] === "Completed"
-									? "bg-green-700 text-white"
+									? "bg-green-700/40 text-green-100 border-green-700"
 									: progress[task.id] === "In Progress"
-									? "bg-yellow-700 text-white"
-									: "bg-gray-700 text-gray-300"
+									? "bg-yellow-700/40 text-yellow-100 border-yellow-700"
+									: "bg-gray-700/40 text-gray-200 border-gray-700"
 							}`}
 						>
 							{progress[task.id] || "Not Started"}
 						</span>
 					</li>
 				))}
-			</ul>
+				</ul>
+			</div>
 		</PageContainer>
 	);
 }

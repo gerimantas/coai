@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import PageContainer from "@/components/ui/PageContainer";
 
 const RULES_API = "/api/agent_rules";
 
@@ -39,9 +40,9 @@ const RulesEditor = () => {
         // Reload rules in backend
         const reloadRes = await fetch("/api/rules/reload", { method: "POST" });
         if (reloadRes.ok) {
-          setReloadStatus("Rules reloaded in backend.");
+          setReloadStatus("Rules reloaded successfully.");
         } else {
-          setReloadStatus("Failed to reload rules in backend.");
+          setReloadStatus("Failed to reload rules.");
         }
       } else {
         setError("Failed to save rules");
@@ -53,34 +54,36 @@ const RulesEditor = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white px-8 py-8">
-      <h1 className="text-lg font-medium mb-6">Agent Rules Editor</h1>
-      {loading ? (
-        <p className="text-sm text-gray-400">Loading...</p>
-      ) : (
-        <>
+    <PageContainer title="Agent Rules" subtitle="Edit and reload rules for agents.">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-base font-medium mb-4">Edit Agent Rules</h2>
+        {loading ? (
+          <p className="text-sm text-[var(--foreground-muted)]">Loading rules...</p>
+        ) : error ? (
+          <p className="text-sm text-red-400">{error}</p>
+        ) : (
           <textarea
-            className="w-full h-64 bg-[#222] text-yellow-200 font-mono p-4 rounded-lg border border-[#8b0000] focus:outline-none focus:ring-2 focus:ring-[#8b0000]"
+            className="w-full min-h-40 p-3 rounded-lg border border-[var(--border)] bg-[var(--background-secondary)] text-[var(--foreground)] mb-4 resize-y"
             value={rules}
             onChange={(e) => setRules(e.target.value)}
-            spellCheck={false}
-            style={{ fontSize: "1rem", color: "#ffe066" }}
+            disabled={saving}
           />
-          <div className="mt-4 flex gap-2">
-            <button
-              className="px-4 py-2 rounded bg-[#8b0000] text-yellow-200 font-bold"
-              onClick={handleSave}
-              disabled={saving}
-            >
-              {saving ? "Saving..." : "Save"}
-            </button>
-            {success && <span className="text-green-400">Saved!</span>}
-            {reloadStatus && <span className="text-blue-400">{reloadStatus}</span>}
-            {error && <span className="text-red-400">{error}</span>}
-          </div>
-        </>
-      )}
-    </div>
+        )}
+        <button
+          className="px-4 py-2 rounded-md border border-blue-500 text-blue-400 hover:bg-blue-500/10 text-sm font-medium"
+          onClick={handleSave}
+          disabled={saving}
+        >
+          {saving ? "Saving..." : "Save Rules"}
+        </button>
+        {success && (
+          <p className="text-green-400 text-xs mt-2">Rules saved successfully.</p>
+        )}
+        {reloadStatus && (
+          <p className="text-blue-400 text-xs mt-2">{reloadStatus}</p>
+        )}
+      </div>
+    </PageContainer>
   );
 };
 

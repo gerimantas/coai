@@ -1,4 +1,4 @@
-// Centralizuotas puslapio wrapper komponentas
+// Page wrapper component with consistent layout
 export default function PageContainer({ children, title, subtitle }) {
   return (
     <section 

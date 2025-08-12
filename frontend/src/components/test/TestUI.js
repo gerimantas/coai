@@ -9,7 +9,7 @@ import Tab from '../ui/Tab';
 export default function TestUI() {
   return (
     <div className="p-8 space-y-6 bg-background min-h-screen text-foreground">
-      <h2 className="text-2xl font-bold mb-4">UI Components Demo</h2>
+  <h2 className="text-lg font-medium mb-4">UI Components Demo</h2>
       <Card>
         <div className="space-x-2 mb-2">
           <Button>Primary</Button>

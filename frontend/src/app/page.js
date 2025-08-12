@@ -1,43 +1,61 @@
 "use client";
+import PageContainer from "@/components/ui/PageContainer";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
-      <div className="mt-[2%] mr-[2%] px-6 py-6">
-        <div className="text-center">
-          <h1 className="text-lg font-medium mb-4">Welcome to COAI</h1>
-          <p className="text-sm text-gray-400 mb-6">
-            Collaborative AI Assistant Interface
+    <PageContainer title="Welcome to COAI" subtitle="Collaborative AI Assistant Interface">
+      <div className="text-center">
+        <h1 className="text-lg font-medium" style={{ marginBottom: 'var(--spacing-lg)' }}></h1>
+        <div 
+          className="bg-[var(--background-secondary)] border border-[var(--border)] rounded-lg"
+          style={{ padding: 'var(--spacing-lg)' }}
+        >
+          <h2 
+            className="text-base font-medium"
+            style={{ marginBottom: 'var(--spacing-md)' }}
+          >
+            Getting Started
+          </h2>
+          <p 
+            className="text-sm text-[var(--foreground-muted)]"
+            style={{ marginBottom: 'var(--spacing-lg)' }}
+          >
+            Use the navigation menu on the left to access different features:
           </p>
-          
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6">
-            <h2 className="text-base font-medium mb-4">Getting Started</h2>
-            <p className="text-sm text-gray-400 mb-6">
-              Use the navigation menu on the left to access different features:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-              <div>
-                <h3 className="text-sm font-medium text-white mb-2">Create</h3>
-                <p className="text-xs text-gray-400">
-                  Start conversations, generate content, and work with AI assistants
-                </p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium text-white mb-2">Manage</h3>
-                <p className="text-xs text-gray-400">
-                  Monitor usage, manage API keys, and review system logs
-                </p>
-              </div>
+          <div 
+            className="grid grid-cols-1 md:grid-cols-2 text-left"
+            style={{ gap: 'var(--spacing-md)' }}
+          >
+            <div>
+              <h3 
+                className="text-sm font-medium text-[var(--foreground)]"
+                style={{ marginBottom: 'var(--spacing-sm)' }}
+              >
+                Create
+              </h3>
+              <p className="text-xs text-[var(--foreground-muted)]">
+                Start conversations, generate content, and work with AI assistants
+              </p>
+            </div>
+            <div>
+              <h3 
+                className="text-sm font-medium text-[var(--foreground)]"
+                style={{ marginBottom: 'var(--spacing-sm)' }}
+              >
+                Manage
+              </h3>
+              <p className="text-xs text-[var(--foreground-muted)]">
+                Monitor usage, manage API keys, and review system logs
+              </p>
             </div>
           </div>
-
-          <div className="mt-12">
-            <p className="text-gray-500 text-sm">
-              COAI v1.0 - Collaborative AI Assistant Interface
-            </p>
-          </div>
+        </div>
+        <div style={{ marginTop: 'var(--spacing-3xl)' }}>
+          <p className="text-[var(--foreground-muted)] text-sm">
+            COAI v1.0 - Collaborative AI Assistant Interface
+          </p>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 }

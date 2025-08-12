@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 
 
-function TreeNode({ node, onFileClick, level = 0 }) {
+function TreeNode({ node, onFileClick, level = 0, selectedPath }) {
   const [open, setOpen] = useState(false);
   const [children, setChildren] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -32,17 +32,19 @@ function TreeNode({ node, onFileClick, level = 0 }) {
           <div>
             {loading && <div>Įkeliama...</div>}
             {children && children.map((child) => (
-              <TreeNode key={child.name + (child.path || "") } node={{...child, path: (child.path || ((node.path ? node.path + "/" : "") + child.name))}} onFileClick={onFileClick} level={level + 1} />
+              <TreeNode key={child.name + (child.path || "") } node={{...child, path: (child.path || ((node.path ? node.path + "/" : "") + child.name))}} onFileClick={onFileClick} level={level + 1} selectedPath={selectedPath} />
             ))}
           </div>
         )}
       </div>
     );
   }
+  const isSelected = selectedPath && selectedPath === node.path;
   return (
     <div style={{ marginLeft: level * 16 }}>
       <button
-        style={{ background: "none", border: "none", color: "#0070f3", cursor: "pointer" }}
+        className={`text-left w-full px-1 py-1.5 rounded ${isSelected ? 'bg-[var(--background-tertiary)] text-[var(--foreground)]' : 'text-blue-400 hover:text-blue-300'}`}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
         onClick={() => onFileClick(node.path)}
       >
         📄 {node.name}
@@ -92,39 +94,50 @@ export default function FileBrowser() {
   };
 
   return (
-    <div style={{ display: "flex", gap: "2rem" }}>
-      <div style={{ minWidth: 300 }}>
-        <h2 style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "0.75rem" }}>Failų medis</h2>
-        <div style={{ maxHeight: 400, overflowY: "auto", border: "1px solid #ccc", padding: 8 }}>
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+      <div className="md:col-span-4">
+        <h2 className="text-sm font-semibold text-[var(--foreground)] mb-2">Failų medis</h2>
+        <div className="max-h-[60vh] overflow-y-auto border border-[var(--border)] rounded-lg p-2 bg-[var(--background-secondary)]">
           {tree ? (
-            <TreeNode node={tree} onFileClick={handleFileClick} />
+            <TreeNode node={tree} onFileClick={handleFileClick} selectedPath={selectedFile} />
           ) : (
             <div>Įkeliama...</div>
           )}
         </div>
-        {error && <div style={{ color: "red" }}>{error}</div>}
+        {error && <div className="text-red-400 mt-2 text-sm">{error}</div>}
       </div>
-      <div style={{ flex: 1 }}>
-        <h2 style={{ fontSize: "1rem", fontWeight: "500", marginBottom: "0.75rem" }}>Failo turinys</h2>
-        {/* Aktyvaus failo pavadinimas */}
-        {selectedFile && (
-          <div style={{ fontWeight: "bold", marginBottom: "12px", color: "#ffd700" }}>{selectedFile}</div>
-        )}
+      <div className="md:col-span-8">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-sm font-semibold text-[var(--foreground)]">Failo turinys</h2>
+          {selectedFile && (
+            <span className="text-xs text-[var(--foreground-muted)] truncate max-w-[60%]">{selectedFile}</span>
+          )}
+        </div>
+        {/* Controls */}
+        <div className="flex items-center gap-2 mb-2">
+          <button className="px-2 py-1 text-xs rounded bg-gray-700 hover:bg-gray-600 text-white" onClick={() => {
+            const pre = document.getElementById('file-content-pre');
+            if (pre) pre.classList.toggle('whitespace-pre-wrap');
+          }}>Wrap</button>
+          <button className="px-2 py-1 text-xs rounded bg-gray-700 hover:bg-gray-600 text-white" onClick={() => {
+            navigator.clipboard.writeText(fileContent || "");
+          }}>Copy</button>
+        </div>
         {loading ? (
           <div>Įkeliama...</div>
         ) : error ? (
-          <div style={{ color: "red" }}>{error}</div>
-        ) : (selectedFile ? (
+          <div className="text-red-400">{error}</div>
+        ) : selectedFile ? (
           fileContent && fileContent.trim() !== "" ? (
-            <pre style={{ background: "#222", color: "#eee", padding: "16px", borderRadius: "8px", minHeight: "200px" }}>
+            <pre id="file-content-pre" className="bg-[var(--background-secondary)] text-[var(--foreground)] border border-[var(--border)] rounded-lg p-4 min-h-[200px] max-h-[60vh] overflow-auto font-mono text-sm whitespace-pre-wrap">
               {fileContent}
             </pre>
           ) : (
-            <div style={{ color: "#aaa" }}>(Tuščias failas)</div>
+            <div className="text-[var(--foreground-muted)]">(Tuščias failas)</div>
           )
         ) : (
-          <div style={{ color: "#aaa" }}>(Nepasirinktas failas)</div>
-        ))}
+          <div className="text-[var(--foreground-muted)]">(Nepasirinktas failas)</div>
+        )}
       </div>
     </div>
   );

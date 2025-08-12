@@ -1,16 +1,14 @@
 "use client";
+import PageContainer from "@/components/ui/PageContainer";
 import React from 'react';
 
 const ApiKeysPage = () => {
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
-      <div className="mt-[2%] mr-[2%] px-6 py-6">
-        <h1 className="text-lg font-medium mb-6">API keys</h1>
-        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-6 text-center">
-          <p className="text-sm text-gray-400">API key management coming soon...</p>
-        </div>
+    <PageContainer title="API keys" subtitle="Manage credentials for external services.">
+      <div className="bg-[var(--background-secondary)] border border-[var(--border)] rounded-lg p-6 text-center">
+        <p className="text-sm text-[var(--foreground-muted)]">API key management coming soon...</p>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

@@ -1,6 +1,5 @@
-import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import StatusBar from "@/components/ui/StatusBar";
+import "../styles/globals.css";
+import Sidebar from "../components/Sidebar";
 
 export default function RootLayout({ children }) {
   return (
@@ -33,8 +32,6 @@ export default function RootLayout({ children }) {
                 {children}
               </div>
             </div>
-            {/* Global status bar */}
-            <StatusBar status="Ready" />
           </main>
         </div>
       </body>

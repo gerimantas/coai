@@ -1,4 +1,5 @@
 "use client";
+import PageContainer from "@/components/ui/PageContainer";
 import React from 'react';
 
 const AssistantsPage = () => {
@@ -18,39 +19,31 @@ const AssistantsPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#0f0f0f] text-white">
-      <div className="mt-[2%] mr-[2%] px-6 py-6">
-        <h1 className="text-lg font-medium mb-6">Assistants</h1>
-        
-        <div className="space-y-4">
-          {assistants.map((assistant, index) => (
-            <div key={assistant.id}>
-              {/* Date separator */}
-              <div className="text-xs text-gray-400 mb-2 font-medium">
-                {assistant.date}
-              </div>
-              
-              {/* Assistant card */}
-              <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-4 hover:bg-[#1f1f1f] transition-colors cursor-pointer">
-                <div className="flex items-center justify-between">
-                  <div className="flex-1">
-                    <h3 className="text-sm font-medium text-white mb-1">
-                      {assistant.name}
-                    </h3>
-                    <p className="text-xs text-gray-400 font-mono">
-                      {assistant.id}
-                    </p>
-                  </div>
-                  <div className="text-xs text-gray-400">
+  <PageContainer title="Assistants" subtitle="Recent assistants and sessions.">
+      <div className="space-y-4">
+        {assistants.map((assistant, index) => (
+          <div key={assistant.id}>
+            {/* Date separator */}
+      <div className="text-xs text-[var(--foreground-muted)] mb-2 font-medium">
+              {assistant.date}
+            </div>
+            {/* Assistant card */}
+      <div className="bg-[var(--background-secondary)] border border-[var(--border)] rounded-lg p-4 hover:bg-[var(--background-tertiary)] transition-colors cursor-pointer">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+          <h3 className="text-sm font-medium text-[var(--foreground)] mb-1">
+                    {assistant.name}
+                  </h3>
+          <p className="text-xs text-[var(--foreground-muted)] font-mono">
                     {assistant.time}
-                  </div>
+                  </p>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </div>
+    </PageContainer>
   );
 };
 
