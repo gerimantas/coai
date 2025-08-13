@@ -60,64 +60,75 @@ class CoaiLoggerStub:
 coai_logger = CoaiLoggerStub()
 
 from app.rules_loader import load_agent_rules, RULES_PATH
+from app.error_handler import (
+    handle_api_errors, validate_chat_request, create_error_response,
+    AIAgentError, ValidationError, log_error
+)
 import threading
 rules_lock = threading.Lock()
 current_agent_rules = load_agent_rules()
 
 # --- Main chat endpoint using orchestrator ---
 @bp.route("/api/chat", methods=["POST"])
+@handle_api_errors
 def chat():
     """
     Main chat endpoint that uses the orchestrator for full request processing
+    Enhanced with comprehensive error handling
     """
+    data = request.get_json()
+    
+    # Validate request data
+    validate_chat_request(data)
+    
+    message = data.get("message", "").strip()
+    project = data.get("project", "demo-project")
+    file = data.get("file", "main.py")
+    
+    # Prepare context
+    context = {
+        "project": project,
+        "file": file,
+        "timestamp": datetime.now().isoformat(),
+        "user_message": message,
+        "endpoint": "/api/chat",
+        "request_id": f"chat_{int(datetime.now().timestamp())}"
+    }
+    
     try:
-        data = request.get_json()
-        message = data.get("message", "")
-        project = data.get("project", "demo-project")
-        file = data.get("file", "main.py")
-        
-        # Validate input
-        if not message or not message.strip():
-            return jsonify({"error": "Message cannot be empty"}), 400
-        
-        # Prepare context
-        context = {
-            "project": project,
-            "file": file,
-            "timestamp": datetime.now().isoformat(),
-            "user_message": message,
-            "endpoint": "/api/chat"
-        }
-        
         # Use orchestrator for full processing
         logger.info(f"Processing chat request through orchestrator - Project: {project}, File: {file}")
+        
         # Inject current rules into context
         with rules_lock:
             context["global_rules"] = current_agent_rules.get('global', [])
             context["agent_rules"] = current_agent_rules.get('agents', {})
+        
         response = orchestrator.process_chat_request(message, context)
         
         # Check if orchestrator returned an error
         if response.get("error"):
-            return jsonify(response), 500
+            # Convert orchestrator error to AI agent error for consistent handling
+            raise AIAgentError(
+                response.get("message", "Orchestrator processing failed"),
+                agent_type=response.get("agent_type", "unknown")
+            )
         
         # Log successful processing
         logger.info(f"Chat request {response.get('request_id')} completed successfully")
         
         return jsonify(response)
+    
+    except (AIAgentError, ValidationError):
+        # These will be handled by the @handle_api_errors decorator
+        raise
+    except Exception as e:
+        # Log unexpected errors and convert to AI agent error
+        log_error(e, context)
+        raise AIAgentError(f"Unexpected error during chat processing: {str(e)}")
 
 
     # --- Dynamic rules reload endpoint ---
-
-        
-    except Exception as e:
-        logger.error(f"Error in chat endpoint: {str(e)}")
-        return jsonify({
-            "error": True,
-            "message": "Internal server error",
-            "details": str(e),
-            "status": "endpoint_error"
-        }), 500
 
 # --- Dynamic rules reload endpoint ---
 @bp.route("/api/rules/reload", methods=["POST"])
@@ -217,6 +228,39 @@ def orchestrator_status():
     except Exception as e:
         logger.error(f"Error getting orchestrator status: {str(e)}")
         return jsonify({"error": "Failed to get orchestrator status"}), 500
+
+@bp.route("/api/health", methods=["GET"])
+def health_check():
+    """System health check endpoint"""
+    try:
+        from app.error_handler import check_system_health
+        health_data = check_system_health()
+        
+        # Add orchestrator status
+        try:
+            orch_status = orchestrator.get_orchestrator_status()
+            health_data["orchestrator"] = {
+                "status": orch_status.get("orchestrator_status", "unknown"),
+                "components": orch_status.get("components", {})
+            }
+        except:
+            health_data["orchestrator"] = {"status": "error"}
+        
+        # Set HTTP status based on health
+        http_status = 200
+        if health_data["status"] == "unhealthy":
+            http_status = 503
+        elif health_data["status"] == "degraded":
+            http_status = 200  # Still operational
+        
+        return jsonify(health_data), http_status
+        
+    except Exception as e:
+        return jsonify({
+            "status": "unhealthy",
+            "error": str(e),
+            "timestamp": datetime.now().isoformat()
+        }), 503
 
 @bp.route('/api/progress/<task_id>', methods=['GET'])
 def get_progress(task_id):
