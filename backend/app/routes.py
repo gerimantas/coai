@@ -2,7 +2,14 @@ from flask import Blueprint, jsonify, request, abort
 import os
 import logging
 from datetime import datetime
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
 from app.progress_tracker import ProgressTracker
+from app.orchestrator import COAIOrchestrator
+
 bp = Blueprint("app", __name__)
 
 progress_tracker = ProgressTracker()
@@ -11,33 +18,42 @@ progress_tracker = ProgressTracker()
 def index():
     return 'COAI backend is running'
 
-# Stub'ai, kad serveris startuotų
+# Initialize the real orchestrator
 logger = logging.getLogger("coai")
-class OrchestratorStub:
-    def process_chat_request(self, message, context):
-        if len(message) > 10000:
+
+# Initialize orchestrator with fallback to stub if there are issues
+try:
+    orchestrator = COAIOrchestrator()
+    logger.info("Real COAI Orchestrator initialized successfully")
+except Exception as e:
+    logger.error(f"Failed to initialize COAI Orchestrator: {e}")
+    logger.info("Falling back to Orchestrator Stub")
+    
+    class OrchestratorStub:
+        def process_chat_request(self, message, context):
+            if len(message) > 10000:
+                return {
+                    "error": "Message too long (max 10000 characters)",
+                    "status": "orchestrator_error"
+                }
             return {
-                "error": "Message too long (max 10000 characters)",
-                "status": "orchestrator_error"
+                "request_id": "stub",
+                "reply": f"Echo: {message}",
+                "original_message": message,
+                "context": context,
+                "metadata": {},
+                "status": "completed",
+                "error": False,
+                "debug": {"stub": True}
             }
-        return {
-            "request_id": "stub",
-            "reply": f"Echo: {message}",
-            "original_message": message,
-            "context": context,
-            "metadata": {},
-            "status": "completed",
-            "error": False,
-            "debug": {"stub": True}
-        }
-    def get_orchestrator_status(self):
-        return {
-            "orchestrator_status": "stub",
-            "components": {"preprocessor": "ready", "logger": "ready", "ai_agents": "ready"},
-            "version": "stub",
-            "capabilities": ["chat_request_processing", "prompt_preprocessing", "request_logging", "ai_agent_integration"]
-        }
-orchestrator = OrchestratorStub()
+        def get_orchestrator_status(self):
+            return {
+                "orchestrator_status": "stub",
+                "components": {"preprocessor": "ready", "logger": "ready", "ai_agents": "ready"},
+                "version": "stub",
+                "capabilities": ["chat_request_processing", "prompt_preprocessing", "request_logging", "ai_agent_integration"]
+            }
+    orchestrator = OrchestratorStub()
 class CoaiLoggerStub:
     def get_chat_history(self, limit):
         return []

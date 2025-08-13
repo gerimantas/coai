@@ -3,15 +3,29 @@ COAI Orchestrator Module
 Coordinates communication between frontend, preprocessor, and AI agents
 """
 
+import os
 import logging
 from datetime import datetime
 from typing import Dict, Any, Optional
 from .preprocessor import preprocessor
 from .logger import coai_logger
-from .ai_agents import ai_agent_manager
-# from .ai_agents_full import ai_agent_manager  # Full version with OpenAI support
 
-logger = logging.getLogger(__name__)
+# Try to import full AI agents first, fallback to basic if needed
+try:
+    # Check if real AI is enabled
+    enable_real_ai = os.getenv('ENABLE_REAL_AI', 'false').lower() == 'true'
+    if enable_real_ai:
+        from .ai_agents_full import ai_agent_manager
+        logger = logging.getLogger(__name__)
+        logger.info("Using full AI agents implementation with OpenAI")
+    else:
+        from .ai_agents import ai_agent_manager
+        logger = logging.getLogger(__name__)
+        logger.info("Using mock AI agents implementation")
+except ImportError as e:
+    logger = logging.getLogger(__name__)
+    logger.warning(f"Failed to import full AI agents, falling back to mock: {e}")
+    from .ai_agents import ai_agent_manager
 
 class COAIOrchestrator:
     """
