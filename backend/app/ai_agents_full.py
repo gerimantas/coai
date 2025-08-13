@@ -78,15 +78,22 @@ class OpenAIAgent:
     def _process_with_openai(self, message: str, context: Dict[str, Any], project: str, file_path: str) -> Dict[str, Any]:
         """Process request using real OpenAI API"""
         try:
-            # Build system prompt based on context
-            system_prompt = self._build_system_prompt(context, project, file_path)
+            # Check if message is already enhanced (contains file context)
+            if "PROJECT FILE INFORMATION" in message:
+                # Message is already enhanced by preprocessor, use minimal system prompt
+                system_prompt = "You are COAI, a helpful AI assistant. Follow the instructions in the user's message carefully."
+                user_message = message
+            else:
+                # Build full system prompt for unprocessed messages
+                system_prompt = self._build_system_prompt(context, project, file_path)
+                user_message = message
             
             # Make OpenAI API call
             response = self.client.chat.completions.create(
                 model=self.model,
                 messages=[
                     {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": message}
+                    {"role": "user", "content": user_message}
                 ],
                 max_tokens=self.max_tokens,
                 temperature=self.temperature

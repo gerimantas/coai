@@ -72,6 +72,14 @@ class COAIOrchestrator:
             logger.info(f"Step 1/4: Preprocessing prompt for {request_id}")
             processed_data = preprocessor.process_prompt(message, context)
             
+            # DEBUG: Log enhanced prompt content
+            enhanced_prompt = processed_data["enhanced_prompt"]
+            logger.info(f"Enhanced prompt length: {len(enhanced_prompt)} characters")
+            if "PROJECT FILE INFORMATION" in enhanced_prompt:
+                logger.info("✅ File context successfully included in prompt")
+            else:
+                logger.warning("❌ File context NOT included in prompt")
+            
             # Step 4: Log preprocessing
             coai_logger.log_prompt_processing(
                 request_id,

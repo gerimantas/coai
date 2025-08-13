@@ -17,6 +17,38 @@ bp = Blueprint("app", __name__)
 progress_tracker = ProgressTracker()
 action_planner = ActionPlanner()
 
+@bp.route("/api/debug/file-context", methods=["POST"])
+def debug_file_context():
+    """Debug endpoint to test file context functionality"""
+    data = request.get_json() or {}
+    message = data.get("message", "What files are in this project?")
+    project = data.get("project", "demo-project")
+    
+    try:
+        # Test file context manager directly
+        from app.file_context_manager import file_context_manager
+        should_include = file_context_manager.should_include_file_context(message)
+        file_data = file_context_manager.get_project_file_listing(project)
+        formatted = file_context_manager.format_file_context_for_ai(file_data)
+        
+        # Test preprocessor
+        from app.preprocessor import preprocessor
+        context = {"project": project, "file": "main.py"}
+        processed = preprocessor.process_prompt(message, context)
+        
+        return jsonify({
+            "message": message,
+            "should_include_file_context": should_include,
+            "file_data_status": file_data["status"],
+            "total_files": file_data["file_summary"]["total_files"],
+            "formatted_preview": formatted[:500],
+            "enhanced_prompt_length": len(processed["enhanced_prompt"]),
+            "has_file_info": "PROJECT FILE INFORMATION" in processed["enhanced_prompt"],
+            "enhanced_prompt_preview": processed["enhanced_prompt"][:800]
+        })
+    except Exception as e:
+        return jsonify({"error": str(e), "traceback": str(e.__traceback__)})
+
 @bp.route('/')
 def index():
     return 'COAI backend is running'
