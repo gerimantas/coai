@@ -1,0 +1,42 @@
+{
+  "id": "plan_20250813_232611",
+  "title": "Custom Development Plan",
+  "description": "Create a test plan for COAI system validation",
+  "tasks": [
+    {
+      "id": "task_1",
+      "title": "Requirements Analysis",
+      "description": "Analyze and document detailed requirements",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": 30,
+      "dependencies": [],
+      "tags": [
+        "planning",
+        "analysis"
+      ],
+      "created_at": "2025-08-13T23:26:11.236649",
+      "completed_at": null
+    },
+    {
+      "id": "task_2",
+      "title": "Testing Implementation",
+      "description": "Write and execute comprehensive tests",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": 60,
+      "dependencies": [],
+      "tags": [
+        "testing",
+        "quality"
+      ],
+      "created_at": "2025-08-13T23:26:11.236659",
+      "completed_at": null
+    }
+  ],
+  "project_path": null,
+  "created_at": "2025-08-13T23:26:11.236680",
+  "updated_at": "2025-08-13T23:26:11.236680",
+  "total_estimated_time": 90,
+  "completion_percentage": 0.0
+}

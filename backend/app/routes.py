@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, abort
+from flask import Blueprint, jsonify, request, abort, send_file
 import os
 import logging
 from datetime import datetime
@@ -9,10 +9,13 @@ load_dotenv()
 
 from app.progress_tracker import ProgressTracker
 from app.orchestrator import COAIOrchestrator
+from app.action_planner import ActionPlanner, TaskStatus, TaskPriority
+from app.security_middleware import rate_limit, validate_security, cache_response
 
 bp = Blueprint("app", __name__)
 
 progress_tracker = ProgressTracker()
+action_planner = ActionPlanner()
 
 @bp.route('/')
 def index():
@@ -70,6 +73,8 @@ current_agent_rules = load_agent_rules()
 
 # --- Main chat endpoint using orchestrator ---
 @bp.route("/api/chat", methods=["POST"])
+@rate_limit(limit=50, window=3600)  # 50 requests per hour
+@validate_security()
 @handle_api_errors
 def chat():
     """
@@ -132,6 +137,8 @@ def chat():
 
 # --- Dynamic rules reload endpoint ---
 @bp.route("/api/rules/reload", methods=["POST"])
+@rate_limit(limit=10, window=3600)  # 10 rules reloads per hour
+@validate_security()
 def reload_agent_rules():
     """Reload agent rules from file and update in memory (no restart)"""
     global current_agent_rules
@@ -262,6 +269,105 @@ def health_check():
             "timestamp": datetime.now().isoformat()
         }), 503
 
+# --- Usage Analytics Endpoints ---
+
+@bp.route("/api/usage/summary", methods=["GET"])
+def get_usage_summary():
+    """Get daily usage summary"""
+    try:
+        from app.usage_tracker import usage_tracker
+        
+        # Get date from query params or use today
+        target_date = request.args.get('date')
+        summary = usage_tracker.get_daily_summary(target_date)
+        
+        if summary:
+            return jsonify({
+                "success": True,
+                "summary": summary.__dict__
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "message": "No data available for the specified date"
+            }), 404
+            
+    except Exception as e:
+        logger.error(f"Error getting usage summary: {str(e)}")
+        return jsonify({"error": "Failed to get usage summary"}), 500
+
+@bp.route("/api/usage/stats", methods=["GET"])
+@cache_response(ttl=60)  # Cache for 1 minute
+@rate_limit(limit=200, window=3600)  # Higher limit for read operations
+def get_usage_stats():
+    """Get usage statistics for the last N days"""
+    try:
+        from app.usage_tracker import usage_tracker
+        
+        days = request.args.get('days', 7, type=int)
+        if days < 1 or days > 90:  # Reasonable limits
+            return jsonify({"error": "Days must be between 1 and 90"}), 400
+        
+        stats = usage_tracker.get_usage_stats(days)
+        return jsonify({
+            "success": True,
+            "stats": stats
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting usage stats: {str(e)}")
+        return jsonify({"error": "Failed to get usage stats"}), 500
+
+@bp.route("/api/usage/export", methods=["POST"])
+def export_usage_data():
+    """Export usage data for a date range"""
+    try:
+        from app.usage_tracker import usage_tracker
+        
+        data = request.get_json()
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        format_type = data.get('format', 'json')
+        
+        if not start_date or not end_date:
+            return jsonify({"error": "start_date and end_date are required"}), 400
+        
+        if format_type not in ['json', 'csv']:
+            return jsonify({"error": "format must be 'json' or 'csv'"}), 400
+        
+        export_path = usage_tracker.export_usage_data(start_date, end_date, format_type)
+        
+        return jsonify({
+            "success": True,
+            "export_path": export_path,
+            "download_url": f"/api/usage/download/{os.path.basename(export_path)}"
+        })
+        
+    except Exception as e:
+        logger.error(f"Error exporting usage data: {str(e)}")
+        return jsonify({"error": "Failed to export usage data"}), 500
+
+@bp.route("/api/usage/download/<filename>", methods=["GET"])
+def download_usage_file(filename):
+    """Download exported usage file"""
+    try:
+        from app.usage_tracker import usage_tracker
+        
+        file_path = usage_tracker.usage_dir / filename
+        
+        if not file_path.exists():
+            return jsonify({"error": "File not found"}), 404
+        
+        # Security check - ensure file is in usage directory
+        if not str(file_path).startswith(str(usage_tracker.usage_dir)):
+            return jsonify({"error": "Access denied"}), 403
+        
+        return send_file(file_path, as_attachment=True)
+        
+    except Exception as e:
+        logger.error(f"Error downloading usage file: {str(e)}")
+        return jsonify({"error": "Failed to download file"}), 500
+
 @bp.route('/api/progress/<task_id>', methods=['GET'])
 def get_progress(task_id):
     status = progress_tracker.get_progress(task_id)
@@ -279,3 +385,154 @@ def set_progress(task_id):
 @bp.route('/api/progress', methods=['GET'])
 def get_all_progress():
     return jsonify(progress_tracker.get_all_progress())
+
+# Action Plan Endpoints
+
+@bp.route('/api/plans', methods=['POST'])
+def create_action_plan():
+    """Generate a new action plan from user request"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        user_request = data.get('request', '').strip()
+        if not user_request:
+            return jsonify({"error": "Request text is required"}), 400
+        
+        project_context = data.get('project_context', {})
+        
+        # Generate action plan
+        plan = action_planner.generate_plan(user_request, project_context)
+        
+        return jsonify({
+            "success": True,
+            "plan": {
+                "id": plan.id,
+                "title": plan.title,
+                "description": plan.description,
+                "total_tasks": len(plan.tasks),
+                "estimated_time": plan.total_estimated_time,
+                "tasks": [
+                    {
+                        "id": task.id,
+                        "title": task.title,
+                        "description": task.description,
+                        "status": task.status.value,
+                        "priority": task.priority.value,
+                        "estimated_time": task.estimated_time,
+                        "tags": task.tags
+                    }
+                    for task in plan.tasks
+                ]
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Error creating action plan: {str(e)}")
+        return jsonify({"error": "Failed to create action plan"}), 500
+
+@bp.route('/api/plans', methods=['GET'])
+@cache_response(ttl=120)  # Cache for 2 minutes
+@rate_limit(limit=200, window=3600)
+def list_action_plans():
+    """List all action plans, optionally filtered by project"""
+    try:
+        project_path = request.args.get('project_path')
+        plans = action_planner.list_plans(project_path)
+        
+        return jsonify({
+            "success": True,
+            "plans": plans
+        })
+        
+    except Exception as e:
+        logger.error(f"Error listing action plans: {str(e)}")
+        return jsonify({"error": "Failed to list action plans"}), 500
+
+@bp.route('/api/plans/<plan_id>', methods=['GET'])
+def get_action_plan(plan_id):
+    """Get detailed information about a specific action plan"""
+    try:
+        plan = action_planner.load_plan(plan_id)
+        if not plan:
+            return jsonify({"error": "Plan not found"}), 404
+        
+        return jsonify({
+            "success": True,
+            "plan": {
+                "id": plan.id,
+                "title": plan.title,
+                "description": plan.description,
+                "created_at": plan.created_at,
+                "updated_at": plan.updated_at,
+                "completion_percentage": plan.completion_percentage,
+                "total_estimated_time": plan.total_estimated_time,
+                "tasks": [
+                    {
+                        "id": task.id,
+                        "title": task.title,
+                        "description": task.description,
+                        "status": task.status.value,
+                        "priority": task.priority.value,
+                        "estimated_time": task.estimated_time,
+                        "dependencies": task.dependencies,
+                        "tags": task.tags,
+                        "created_at": task.created_at,
+                        "completed_at": task.completed_at
+                    }
+                    for task in plan.tasks
+                ]
+            }
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting action plan: {str(e)}")
+        return jsonify({"error": "Failed to get action plan"}), 500
+
+@bp.route('/api/plans/<plan_id>/progress', methods=['GET'])
+def get_plan_progress(plan_id):
+    """Get progress information for a specific plan"""
+    try:
+        progress = action_planner.get_plan_progress(plan_id)
+        if not progress:
+            return jsonify({"error": "Plan not found"}), 404
+        
+        return jsonify({
+            "success": True,
+            "progress": progress
+        })
+        
+    except Exception as e:
+        logger.error(f"Error getting plan progress: {str(e)}")
+        return jsonify({"error": "Failed to get plan progress"}), 500
+
+@bp.route('/api/plans/<plan_id>/tasks/<task_id>/status', methods=['PUT'])
+def update_task_status(plan_id, task_id):
+    """Update the status of a specific task"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+        
+        new_status = data.get('status')
+        if not new_status:
+            return jsonify({"error": "Status is required"}), 400
+        
+        try:
+            status_enum = TaskStatus(new_status)
+        except ValueError:
+            return jsonify({"error": "Invalid status value"}), 400
+        
+        success = action_planner.update_task_status(plan_id, task_id, status_enum)
+        if not success:
+            return jsonify({"error": "Plan or task not found"}), 404
+        
+        return jsonify({
+            "success": True,
+            "message": "Task status updated successfully"
+        })
+        
+    except Exception as e:
+        logger.error(f"Error updating task status: {str(e)}")
+        return jsonify({"error": "Failed to update task status"}), 500

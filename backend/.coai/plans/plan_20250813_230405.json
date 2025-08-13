@@ -1,0 +1,95 @@
+{
+  "id": "plan_20250813_230405",
+  "title": "Custom Development Plan",
+  "description": "Create a simple web application with user authentication",
+  "tasks": [
+    {
+      "id": "task_1",
+      "title": "Requirements Analysis",
+      "description": "Analyze and document detailed requirements",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": 30,
+      "dependencies": [],
+      "tags": [
+        "planning",
+        "analysis"
+      ],
+      "created_at": "2025-08-13T23:04:05.048755",
+      "completed_at": null
+    },
+    {
+      "id": "task_2",
+      "title": "Backend API Design",
+      "description": "Design API endpoints and data structures",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": 45,
+      "dependencies": [
+        "task_1"
+      ],
+      "tags": [
+        "backend",
+        "api"
+      ],
+      "created_at": "2025-08-13T23:04:05.048766",
+      "completed_at": null
+    },
+    {
+      "id": "task_3",
+      "title": "Implement Backend Logic",
+      "description": "Code the backend implementation",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": 90,
+      "dependencies": [
+        "task_2"
+      ],
+      "tags": [
+        "backend",
+        "implementation"
+      ],
+      "created_at": "2025-08-13T23:04:05.048770",
+      "completed_at": null
+    },
+    {
+      "id": "task_4",
+      "title": "UI/UX Design",
+      "description": "Design user interface and experience",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": 60,
+      "dependencies": [
+        "task_1"
+      ],
+      "tags": [
+        "frontend",
+        "design"
+      ],
+      "created_at": "2025-08-13T23:04:05.048772",
+      "completed_at": null
+    },
+    {
+      "id": "task_5",
+      "title": "Frontend Implementation",
+      "description": "Implement frontend components and logic",
+      "status": "pending",
+      "priority": "medium",
+      "estimated_time": 90,
+      "dependencies": [
+        "task_4"
+      ],
+      "tags": [
+        "frontend",
+        "implementation"
+      ],
+      "created_at": "2025-08-13T23:04:05.048775",
+      "completed_at": null
+    }
+  ],
+  "project_path": null,
+  "created_at": "2025-08-13T23:04:05.048796",
+  "updated_at": "2025-08-13T23:04:05.048796",
+  "total_estimated_time": 315,
+  "completion_percentage": 0.0
+}

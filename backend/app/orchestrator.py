@@ -9,6 +9,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from .preprocessor import preprocessor
 from .logger import coai_logger
+from .usage_tracker import usage_tracker
 
 # Try to import full AI agents first, fallback to basic if needed
 try:
@@ -43,7 +44,7 @@ class COAIOrchestrator:
     
     def process_chat_request(self, message: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """
-        Main orchestration method for chat requests
+        Main orchestration method for chat requests with usage tracking
         
         Flow: Frontend → Preprocessor → Orchestrator → AI Agent → Response
         
@@ -55,6 +56,7 @@ class COAIOrchestrator:
             Processed response ready for frontend
         """
         request_id = None
+        start_time = datetime.now()
         
         try:
             # Step 1: Log incoming request
@@ -82,6 +84,7 @@ class COAIOrchestrator:
             logger.info(f"Step 2/4: Calling AI agent for {request_id}")
             ai_request = {
                 "message": processed_data["enhanced_prompt"],
+                "context": context,  # Add context for ai_agents_full.py
                 "metadata": processed_data["metadata"],
                 "request_id": request_id
             }
@@ -92,19 +95,44 @@ class COAIOrchestrator:
                 logger.warning(f"AI agent failed for {request_id}, falling back to simulation")
                 ai_response = self._simulate_ai_response(processed_data)
                 agent_type = "simulated_fallback"
+                real_ai = False
+                usage_data = {"total_tokens": 0, "model": "fallback"}
             else:
                 ai_response = ai_result["response"]
                 agent_type = ai_result.get("agent_type", "unknown")
+                real_ai = ai_result.get("real_ai", False)
+                usage_data = ai_result.get("usage", {"total_tokens": 0, "model": "unknown"})
             
             # Step 6: Log AI response
             logger.info(f"Step 3/4: Processing AI response for {request_id}")
             coai_logger.log_ai_response(request_id, ai_response, agent_type)
             
-            # Step 7: Prepare final response
+            # Step 7: Track usage analytics
+            end_time = datetime.now()
+            response_time = (end_time - start_time).total_seconds()
+            
+            usage_tracker.track_request(
+                request_id=request_id,
+                agent_type=agent_type,
+                project=context.get("project", "unknown"),
+                file=context.get("file", "unknown"),
+                message=message,
+                response=ai_response,
+                tokens_data=usage_data,
+                response_time=response_time,
+                status="success",
+                real_ai=real_ai
+            )
+            
+            # Step 8: Prepare final response
             logger.info(f"Step 4/4: Preparing final response for {request_id}")
             final_response = self._prepare_final_response(
                 request_id, message, context, processed_data, ai_response, agent_type
             )
+            
+            # Add usage info to response
+            final_response["usage_tracked"] = True
+            final_response["response_time"] = response_time
             
             logger.info(f"Orchestrator completed processing: {request_id}")
             return final_response
@@ -113,7 +141,25 @@ class COAIOrchestrator:
             error_msg = f"Orchestrator error: {str(e)}"
             logger.error(f"{error_msg} for request: {request_id}")
             
+            # Track failed request
             if request_id:
+                end_time = datetime.now()
+                response_time = (end_time - start_time).total_seconds()
+                
+                usage_tracker.track_request(
+                    request_id=request_id,
+                    agent_type="error",
+                    project=context.get("project", "unknown"),
+                    file=context.get("file", "unknown"),
+                    message=message,
+                    response="",
+                    tokens_data={"total_tokens": 0, "model": "error"},
+                    response_time=response_time,
+                    status="error",
+                    real_ai=False,
+                    error=error_msg
+                )
+                
                 coai_logger.log_error(request_id, error_msg, context)
             
             # Return error response

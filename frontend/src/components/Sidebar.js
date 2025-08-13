@@ -10,6 +10,7 @@ const menuItems = [
 			{ name: 'Chat', href: '/chat' },
 			{ name: 'Files', href: '/files' },
 			{ name: 'Assistants', href: '/assistants' },
+			{ name: 'Action Plans', href: '/plans' },
 			{ name: 'Test UI Components', href: '/testui' }
 		]
 	},

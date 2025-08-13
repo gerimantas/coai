@@ -1,0 +1,27 @@
+{
+  "id": "plan_20250813_230333",
+  "title": "Custom Development Plan",
+  "description": "Create a simple web application with user authentication",
+  "tasks": [
+    {
+      "id": "task_1",
+      "title": "Requirements Analysis",
+      "description": "Analyze and document detailed requirements",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": 30,
+      "dependencies": [],
+      "tags": [
+        "planning",
+        "analysis"
+      ],
+      "created_at": "2025-08-13T23:03:33.294245",
+      "completed_at": null
+    }
+  ],
+  "project_path": null,
+  "created_at": "2025-08-13T23:03:33.294271",
+  "updated_at": "2025-08-13T23:03:33.294271",
+  "total_estimated_time": 30,
+  "completion_percentage": 0.0
+}
