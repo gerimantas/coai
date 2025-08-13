@@ -23,6 +23,10 @@ __pycache__/
 instance/
 .webassets-cache
 
+# Environment variables
+.env
+backend/.env
+
 # VSCode
 .vscode/
 
