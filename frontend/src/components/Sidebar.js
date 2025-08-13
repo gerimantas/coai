@@ -5,25 +5,44 @@ import Link from 'next/link';
 
 const menuItems = [
 	{
-		name: 'Create',
+		name: 'Core',
 		items: [
+			{ name: 'Dashboard', href: '/' },
 			{ name: 'Chat', href: '/chat' },
-			{ name: 'Files', href: '/files' },
-			{ name: 'Assistants', href: '/assistants' },
-			{ name: 'Action Plans', href: '/plans' },
-			{ name: 'Test UI Components', href: '/testui' }
+			{ name: 'Projects', href: '/projects' }
 		]
 	},
 	{
-		name: 'Manage',
+		name: 'Tools', 
 		items: [
-			{ name: 'Projects', href: '/projects' },
-			{ name: 'Agent Rules', href: '/rules' },
+			{ name: 'Action Plans', href: '/plans' },
+			{ name: 'Files', href: '/files' },
+			{ name: 'Assistants', href: '/assistants' }
+		]
+	},
+	{
+		name: 'Media',
+		items: [
+			{ name: 'Images', href: '/images' },
+			{ name: 'Audio', href: '/audio' },
+			{ name: 'Storage', href: '/storage' }
+		]
+	},
+	{
+		name: 'Analytics',
+		items: [
 			{ name: 'Usage', href: '/usage' },
-			{ name: 'API keys', href: '/api-keys' },
+			{ name: 'Progress', href: '/progress' },
+			{ name: 'Batches', href: '/batches' }
+		]
+	},
+	{
+		name: 'Settings',
+		items: [
+			{ name: 'Agent Rules', href: '/rules' },
+			{ name: 'API Keys', href: '/api-keys' },
 			{ name: 'Logs', href: '/logs' },
-			{ name: 'Settings', href: '/settings' },
-			{ name: 'Task Progress', href: '/progress' }
+			{ name: 'Settings', href: '/settings' }
 		]
 	}
 ];
