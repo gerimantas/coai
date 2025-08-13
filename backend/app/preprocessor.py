@@ -6,6 +6,7 @@ Handles prompt preparation and enhancement for AI agents
 import logging
 from datetime import datetime
 from typing import Dict, Any
+from .file_context_manager import file_context_manager
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +70,7 @@ class PromptPreprocessor:
     
     def _build_prompt(self, message: str, context: Dict[str, Any]) -> str:
         """
-        Build enhanced prompt with context
+        Build enhanced prompt with context and file information when needed
         """
         project = context.get("project", "unknown")
         file = context.get("file", "unknown")
@@ -80,20 +81,36 @@ class PromptPreprocessor:
             f"Current File: {file}",
             f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
             "",
+        ]
+        
+        # Check if this request needs file context
+        if file_context_manager.should_include_file_context(message):
+            logger.info(f"Including file context for project: {project}")
+            file_data = file_context_manager.get_project_file_listing(project)
+            file_context_text = file_context_manager.format_file_context_for_ai(file_data)
+            
+            prompt_parts.extend([
+                "=== PROJECT FILE INFORMATION ===",
+                file_context_text,
+                "",
+            ])
+        
+        prompt_parts.extend([
             "=== System Instructions ===",
             self.default_context["system_role"],
             "Please respond in English with clear, actionable advice.",
             "If this involves code, provide specific examples.",
+            "If asked about project files, use the file structure information provided above.",
             "",
             "=== User Query ===",
             message,
             "",
             "=== Response Guidelines ===",
             "- Be concise but thorough",
-            "- Include code examples when relevant",
-            "- Consider the project context",
+            "- Include code examples when relevant", 
+            "- Consider the project context and file structure",
             "- Provide actionable next steps"
-        ]
+        ])
         
         return "\n".join(prompt_parts)
     
