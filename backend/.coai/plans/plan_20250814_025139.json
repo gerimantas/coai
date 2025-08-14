@@ -1,0 +1,27 @@
+{
+  "id": "plan_20250814_025139",
+  "title": "Custom Development Plan",
+  "description": "Optimize COAI performance and add new features",
+  "tasks": [
+    {
+      "id": "task_1",
+      "title": "Requirements Analysis",
+      "description": "Analyze and document detailed requirements",
+      "status": "pending",
+      "priority": "high",
+      "estimated_time": 30,
+      "dependencies": [],
+      "tags": [
+        "planning",
+        "analysis"
+      ],
+      "created_at": "2025-08-14T02:51:39.113581",
+      "completed_at": null
+    }
+  ],
+  "project_path": null,
+  "created_at": "2025-08-14T02:51:39.113606",
+  "updated_at": "2025-08-14T02:51:39.113606",
+  "total_estimated_time": 30,
+  "completion_percentage": 0.0
+}

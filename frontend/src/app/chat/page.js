@@ -20,19 +20,24 @@ export default function ChatPage() {
     setError("");
     
     try {
-      const res = await fetch("http://localhost:5000/api/chat", {
+      const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input, project, file })
       });
       const data = await res.json();
+      
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to send message');
+      }
+      
       setMessages((msgs) => [...msgs, 
         { role: "user", text: input }, 
         { role: "ai", text: data.reply }
       ]);
       setInput("");
     } catch (err) {
-      setError("Error sending message");
+      setError(err.message || "Error sending message");
     } finally {
       setLoading(false);
     }

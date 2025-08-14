@@ -78,15 +78,22 @@ class OpenAIAgent:
     def _process_with_openai(self, message: str, context: Dict[str, Any], project: str, file_path: str) -> Dict[str, Any]:
         """Process request using real OpenAI API"""
         try:
+            # Debug logging
+            logger.info(f"🔍 AI Agent Debug - Message length: {len(message)}")
+            logger.info(f"🔍 Contains 'PROJECT FILE INFORMATION': {'PROJECT FILE INFORMATION' in message}")
+            logger.info(f"🔍 Message preview: {message[:200]}...")
+            
             # Check if message is already enhanced (contains file context)
             if "PROJECT FILE INFORMATION" in message:
                 # Message is already enhanced by preprocessor, use minimal system prompt
                 system_prompt = "You are COAI, a helpful AI assistant. Follow the instructions in the user's message carefully."
                 user_message = message
+                logger.info("🎯 Using MINIMAL system prompt - enhanced message detected")
             else:
                 # Build full system prompt for unprocessed messages
                 system_prompt = self._build_system_prompt(context, project, file_path)
                 user_message = message
+                logger.info("📝 Using FULL system prompt - regular message")
             
             # Make OpenAI API call
             response = self.client.chat.completions.create(
@@ -188,6 +195,30 @@ Your capabilities include:
         """Generate intelligent mock responses"""
         
         message_lower = message.lower()
+        
+        # Handle file listing questions with actual project context
+        if any(phrase in message_lower for phrase in ['what files', 'list files', 'files in this project', 'project structure']):
+            try:
+                from .file_context_manager import FileContextManager
+                file_manager = FileContextManager()
+                file_data = file_manager.get_project_file_listing(project)
+                file_info = file_manager.format_file_context_for_ai(file_data)
+                return f"""Here are the files in the {project} project:
+
+{file_info}
+
+This project contains multiple directories and files across frontend, backend, and documentation components."""
+            except Exception as e:
+                logger.error(f"File context manager error in mock response: {e}")
+                return f"""I can help you explore the {project} project structure! Based on the current context, this appears to be a COAI system with:
+
+📁 **Main directories:**
+- `frontend/` - Next.js React application
+- `backend/` - Flask Python API server  
+- `planning/` - Project documentation
+- `scripts/` - Development utilities
+
+For a complete file listing, the file context system should provide detailed information. (Error: {str(e)})"""
         
         if any(word in message_lower for word in ['debug', 'error', 'bug', 'issue', 'problem']):
             return f"""I can help you debug the issue in {file_path}! Here's my analysis:

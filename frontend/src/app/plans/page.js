@@ -20,10 +20,15 @@ const PlansPage = () => {
   const fetchPlans = async () => {
     try {
       setLoading(true)
+      console.log('Fetching plans...')
       const response = await fetch('/api/plans')
+      console.log('Response status:', response.status)
       if (response.ok) {
         const data = await response.json()
+        console.log('Plans data:', data)
         setPlans(data.plans || [])
+      } else {
+        console.error('Failed to fetch plans:', response.status)
       }
     } catch (error) {
       console.error('Error fetching plans:', error)
@@ -51,7 +56,7 @@ const PlansPage = () => {
 
       if (response.ok) {
         const data = await response.json()
-        setPlans([...plans, {
+        const newPlan = {
           id: data.plan.id,
           title: data.plan.title,
           description: data.plan.description,
@@ -59,7 +64,17 @@ const PlansPage = () => {
           total_tasks: data.plan.total_tasks,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        }])
+        }
+        
+        // Add plan to list
+        setPlans([...plans, newPlan])
+        
+        // Set as selected plan with full details including tasks
+        setSelectedPlan({
+          ...newPlan,
+          tasks: data.plan.tasks || []
+        })
+        
         setNewPlanRequest('')
         setShowCreateForm(false)
       }
@@ -134,15 +149,25 @@ const PlansPage = () => {
     <PageContainer title="Action Plans" subtitle="Manage your project action plans and tasks">
       <div className="space-y-6">
         
+        {/* Debug Info */}
+        <div className="bg-gray-100 p-2 text-xs rounded">
+          Debug: Loading={loading.toString()}, Plans count={plans.length}, Selected={selectedPlan?.id || 'none'}
+        </div>
+        
         {/* Header with Create Button */}
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold">Your Action Plans</h2>
             <p className="text-sm text-gray-600">Create and manage step-by-step project plans</p>
           </div>
-          <Button onClick={() => setShowCreateForm(true)}>
-            Create New Plan
-          </Button>
+          <div className="flex gap-2">
+            <Button onClick={fetchPlans} variant="outline">
+              Refresh
+            </Button>
+            <Button onClick={() => setShowCreateForm(true)}>
+              Create New Plan
+            </Button>
+          </div>
         </div>
 
         {/* Create Plan Form */}
@@ -227,59 +252,66 @@ const PlansPage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {selectedPlan.tasks.map((task) => (
-                      <div key={task.id} className="border rounded-lg p-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-medium">{task.title}</h4>
-                          <div className="flex gap-2">
-                            <Badge variant={getPriorityColor(task.priority)}>
-                              {task.priority}
-                            </Badge>
-                            <Badge variant={getStatusColor(task.status)}>
-                              {task.status.replace('_', ' ')}
-                            </Badge>
+                    {selectedPlan.tasks && selectedPlan.tasks.length > 0 ? (
+                      selectedPlan.tasks.map((task) => (
+                        <div key={task.id} className="border rounded-lg p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-medium">{task.title}</h4>
+                            <div className="flex gap-2">
+                              <Badge variant={getPriorityColor(task.priority)}>
+                                {task.priority}
+                              </Badge>
+                              <Badge variant={getStatusColor(task.status)}>
+                                {task.status.replace('_', ' ')}
+                              </Badge>
+                            </div>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3">{task.description}</p>
+                          <div className="flex justify-between items-center">
+                            <div className="flex gap-2 text-xs text-gray-500">
+                              <span>{task.estimated_time} min</span>
+                              {task.tags && task.tags.map(tag => (
+                                <span key={tag} className="bg-gray-100 px-2 py-1 rounded">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex gap-1">
+                              {task.status === 'pending' && (
+                                <Button 
+                                  size="sm" 
+                                  onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'in_progress')}
+                                >
+                                  Start
+                                </Button>
+                              )}
+                              {task.status === 'in_progress' && (
+                                <Button 
+                                  size="sm" 
+                                  onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'completed')}
+                                >
+                                  Complete
+                                </Button>
+                              )}
+                              {task.status !== 'completed' && (
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'blocked')}
+                                >
+                                  Block
+                                </Button>
+                              )}
+                            </div>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-600 mb-3">{task.description}</p>
-                        <div className="flex justify-between items-center">
-                          <div className="flex gap-2 text-xs text-gray-500">
-                            <span>{task.estimated_time} min</span>
-                            {task.tags.map(tag => (
-                              <span key={tag} className="bg-gray-100 px-2 py-1 rounded">
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                          <div className="flex gap-1">
-                            {task.status === 'pending' && (
-                              <Button 
-                                size="sm" 
-                                onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'in_progress')}
-                              >
-                                Start
-                              </Button>
-                            )}
-                            {task.status === 'in_progress' && (
-                              <Button 
-                                size="sm" 
-                                onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'completed')}
-                              >
-                                Complete
-                              </Button>
-                            )}
-                            {task.status !== 'completed' && (
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                onClick={() => updateTaskStatus(selectedPlan.id, task.id, 'blocked')}
-                              >
-                                Block
-                              </Button>
-                            )}
-                          </div>
-                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center py-8 text-gray-500">
+                        <p>No tasks available for this plan</p>
+                        <p className="text-xs mt-1">Tasks: {JSON.stringify(selectedPlan.tasks)}</p>
                       </div>
-                    ))}
+                    )}
                   </div>
                 </CardContent>
               </Card>

@@ -205,8 +205,21 @@ Message: "Help me implement the calculator from my action plan"
 
 ### **Problem: No AI Response**
 - Patikrinti backend logs
-- Verify .env ENABLE_REAL_AI=true
-- Check OpenAI API key
+- **CRITICAL: Verify real OpenAI API key configured**
+- Check backend/.env: OPENAI_API_KEY=sk-proj-... (not demo key)
+- **Ensure ENABLE_REAL_AI=true in .env file**
+- Set FALLBACK_TO_MOCK=false
+- Run: `python backend/test_openai_key.py` to validate
+- Restart backend server after changes
+
+### **Problem: Demo Responses Only**
+- 🔑 **Replace demo key with real OpenAI key**
+- Edit `backend/.env`:
+  - Line 4: OPENAI_API_KEY=your-real-key
+  - Line 9: ENABLE_REAL_AI=true  
+  - Line 12: FALLBACK_TO_MOCK=false
+- Restart backend server
+- Verify with: `python backend/test_openai_key.py`
 
 ### **Problem: Analytics Empty**
 - Padaryti chat requests
