@@ -305,15 +305,32 @@ pytest               # Backend tests
 
 ## 🔐 **Configuration & Security**
 
+### **Environment Setup (Required)**
+```bash
+# Step 1: Copy environment template
+cd backend
+cp .env.example .env
+
+# Step 2: Add your OpenAI API key
+# Edit .env file and replace 'sk-your-openai-api-key-here' with your actual key
+# Get your API key from: https://platform.openai.com/api-keys
+```
+
+**⚠️ Important Security Notes:**
+- `.env` file is **never committed** to git (automatically ignored)
+- Your API key stays **local only** - never shared or pushed
+- Use `.env.example` as template for new setups
+- Keep your API key secure and don't share it
+
 ### **Environment Variables**
 ```bash
-# Backend (.env)
-OPENAI_API_KEY=sk-proj-...           # Real OpenAI API key
+# Backend (.env) - Main configuration
+OPENAI_API_KEY=sk-proj-...           # Your OpenAI API key (required)
 ENABLE_REAL_AI=true                  # Enable real AI vs mock responses
 FALLBACK_TO_MOCK=false               # Fallback behavior on API failure
 DEFAULT_AI_AGENT=openai              # Default AI service
 
-# Security
+# Security settings
 ALLOWED_PROJECTS_PATH=C:\ai_projects # Restrict file access
 RATE_LIMIT_REQUESTS=100              # Requests per hour limit
 ```
